@@ -3,7 +3,8 @@ from typing import Optional, Callable, List
 import requests
 from marshmallow import ValidationError
 
-from lighthouz_sdk.lighthouz.schema import benchmark_schema
+from lighthouz.schema import benchmark_schema
+
 
 
 class Evaluation:
