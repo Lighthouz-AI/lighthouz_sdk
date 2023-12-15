@@ -36,7 +36,7 @@ class Evaluation:
                     benchmark_url, headers=benchmark_headers
                 )
                 if benchmark_response.status_code == 200:
-                    benchmark = benchmark_response.json()["benchmark"]
+                    benchmarks = benchmark_response.json()["benchmark"]
                 else:
                     return {
                         "success": False,
