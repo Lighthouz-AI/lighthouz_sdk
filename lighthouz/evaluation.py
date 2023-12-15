@@ -57,7 +57,7 @@ class Evaluation:
 
             for benchmark in benchmarks:
                 benchmark["generated_response"] = response_function(benchmark["query"])
-
+            print(benchmarks)
             evaluation_url = f"{self.LH.base_url}/api/{test_id}/docqa_evaluate_group"
             evaluation_data = benchmarks
             evaluation_headers = {
@@ -70,6 +70,7 @@ class Evaluation:
                 evaluation = evaluation_response.json()
                 return evaluation
             else:
+                print("error")
                 return {
                     "success": False,
                     "message": evaluation_response.json()["message"],
