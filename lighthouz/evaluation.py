@@ -17,7 +17,7 @@ class Evaluation:
         benchmarks: Optional[List[dict]] = None,
     ):
         test_create_url = f"{self.LH.base_url}/apps/{self.LH.lh_app_id}/tests/create"
-        test_create_data = {"status": "running"}
+        test_create_data = {"status": "running", "benchmark_id": benchmark_id}
         test_create_headers = {
             "api-key": self.LH.lh_api_key,
         }
