@@ -6,7 +6,6 @@ from marshmallow import ValidationError
 from lighthouz.schema import benchmark_schema
 
 
-
 class Evaluation:
     def __init__(self, LH):
         self.LH = LH
@@ -68,7 +67,13 @@ class Evaluation:
             )
             if evaluation_response.status_code == 200:
                 evaluation = evaluation_response.json()
-                return evaluation
+                return {
+                    "success": True,
+                    "evaluation": evaluation,
+                    "test_id": test_id,
+                    "benchmark_id": benchmark_id,
+                    "dashboard_url": f"https://lighthouz.ai/evaluation/{self.LH.lh_app_id}/{test_id}?api_key={self.LH.lh_api_key}",
+                }
             else:
                 print("error")
                 return {
