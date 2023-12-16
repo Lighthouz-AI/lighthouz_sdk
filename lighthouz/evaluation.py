@@ -14,7 +14,7 @@ class Evaluation:
         self, response_function: Callable[[str], str], benchmark_id: str
     ):
         test_create_url = f"{self.LH.base_url}/apps/{self.LH.lh_app_id}/tests/create"
-        test_create_data = {"status": "running", "benchmark_id": benchmark_id}
+        test_create_data = {"status": "completed", "benchmark_id": benchmark_id}
         test_create_headers = {
             "api-key": self.LH.lh_api_key,
         }
@@ -42,37 +42,47 @@ class Evaluation:
             except ValidationError as err:
                 return {"success": False, "message": err.messages}
 
-            for benchmark in benchmarks:
+            print(f"Evaluating on {len(benchmarks)} benchmark(s).")
+            results = []
+            for idx, benchmark in enumerate(benchmarks):
                 try:
                     benchmark["generated_response"] = response_function(
                         benchmark["query"]
                     )
                 except Exception as e:
-                    return {"success": False, "message": str(e), "type": "User response function"}
-            # print(benchmarks)
-            evaluation_url = f"{self.LH.base_url}/api/{test_id}/docqa_evaluate_group"
-            evaluation_data = benchmarks
-            evaluation_headers = {
-                "api-key": self.LH.lh_api_key,
+                    return {
+                        "success": False,
+                        "message": str(e),
+                        "type": "User response function",
+                    }
+                evaluation_url = (
+                    f"{self.LH.base_url}/api/{test_id}/docqa_evaluate_single"
+                )
+                evaluation_data = benchmark
+                evaluation_headers = {
+                    "api-key": self.LH.lh_api_key,
+                }
+                evaluation_response = requests.post(
+                    evaluation_url, headers=evaluation_headers, json=evaluation_data
+                )
+                if evaluation_response.status_code == 200:
+                    evaluation = evaluation_response.json()
+                    results.append(evaluation)
+                    print(f"Evaluated on benchmark {idx+1}/{len(benchmarks)}")
+                else:
+                    print("error")
+                    return {
+                        "success": False,
+                        "message": evaluation_response.json()["message"],
+                    }
+            return {
+                "success": True,
+                "evaluation": results,
+                "test_id": test_id,
+                "benchmark_id": benchmark_id,
+                "dashboard_url": f"https://lighthouz.ai/evaluation/{self.LH.lh_app_id}/{test_id}?api_key={self.LH.lh_api_key}",
             }
-            evaluation_response = requests.post(
-                evaluation_url, headers=evaluation_headers, json=evaluation_data
-            )
-            if evaluation_response.status_code == 200:
-                evaluation = evaluation_response.json()
-                return {
-                    "success": True,
-                    "evaluation": evaluation,
-                    "test_id": test_id,
-                    "benchmark_id": benchmark_id,
-                    "dashboard_url": f"https://lighthouz.ai/evaluation/{self.LH.lh_app_id}/{test_id}?api_key={self.LH.lh_api_key}",
-                }
-            else:
-                print("error")
-                return {
-                    "success": False,
-                    "message": evaluation_response.json()["message"],
-                }
+
         else:
             return {
                 "success": False,
