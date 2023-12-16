@@ -37,14 +37,14 @@ class Evaluation:
                 }
             try:
                 for benchmark in benchmarks:
-                    print(benchmark)
+                    # print(benchmark)
                     benchmark_schema.load(benchmark)
             except ValidationError as err:
                 return {"success": False, "message": err.messages}
 
             for benchmark in benchmarks:
                 benchmark["generated_response"] = response_function(benchmark["query"])
-            print(benchmarks)
+            # print(benchmarks)
             evaluation_url = f"{self.LH.base_url}/api/{test_id}/docqa_evaluate_group"
             evaluation_data = benchmarks
             evaluation_headers = {
