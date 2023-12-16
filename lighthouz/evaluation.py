@@ -48,7 +48,7 @@ class Evaluation:
                         benchmark["query"]
                     )
                 except Exception as e:
-                    return {"success": False, "message": str(e)}
+                    return {"success": False, "message": str(e), "type": "User function"}
             # print(benchmarks)
             evaluation_url = f"{self.LH.base_url}/api/{test_id}/docqa_evaluate_group"
             evaluation_data = benchmarks
