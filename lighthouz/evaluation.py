@@ -1,4 +1,4 @@
-from typing import Optional, Callable, List
+from typing import Callable, List, Optional
 
 import requests
 from marshmallow import ValidationError
