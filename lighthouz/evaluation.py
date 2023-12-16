@@ -11,10 +11,7 @@ class Evaluation:
         self.LH = LH
 
     def evaluate_rag_model(
-        self,
-        response_function: Callable[[str], str],
-        benchmark_id: Optional[str] = None,
-        benchmarks: Optional[List[dict]] = None,
+        self, response_function: Callable[[str], str], benchmark_id: str
     ):
         test_create_url = f"{self.LH.base_url}/apps/{self.LH.lh_app_id}/tests/create"
         test_create_data = {"status": "running", "benchmark_id": benchmark_id}
@@ -26,27 +23,18 @@ class Evaluation:
         )
         if test_create_response.status_code == 200:
             test_id = test_create_response.json()["test_id"]
-            if benchmark_id:
-                benchmark_url = f"{self.LH.base_url}/apps/benchmarks/{benchmark_id}"
-                benchmark_headers = {
-                    "api-key": self.LH.lh_api_key,
-                }
-                benchmark_response = requests.get(
-                    benchmark_url, headers=benchmark_headers
-                )
-                if benchmark_response.status_code == 200:
-                    benchmarks = benchmark_response.json()["benchmark"]["benchmark"]
-                else:
-                    return {
-                        "success": False,
-                        "message": benchmark_response.json()["message"],
-                    }
+            benchmark_url = f"{self.LH.base_url}/apps/benchmarks/{benchmark_id}"
+            benchmark_headers = {
+                "api-key": self.LH.lh_api_key,
+            }
+            benchmark_response = requests.get(benchmark_url, headers=benchmark_headers)
+            if benchmark_response.status_code == 200:
+                benchmarks = benchmark_response.json()["benchmark"]["benchmark"]
             else:
-                if not benchmarks:
-                    return {
-                        "success": False,
-                        "message": "Either benchmark_id or benchmark must be provided",
-                    }
+                return {
+                    "success": False,
+                    "message": benchmark_response.json()["message"],
+                }
             try:
                 for benchmark in benchmarks:
                     print(benchmark)
