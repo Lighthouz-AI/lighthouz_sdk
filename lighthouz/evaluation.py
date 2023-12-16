@@ -43,7 +43,12 @@ class Evaluation:
                 return {"success": False, "message": err.messages}
 
             for benchmark in benchmarks:
-                benchmark["generated_response"] = response_function(benchmark["query"])
+                try:
+                    benchmark["generated_response"] = response_function(
+                        benchmark["query"]
+                    )
+                except Exception as e:
+                    return {"success": False, "message": str(e)}
             # print(benchmarks)
             evaluation_url = f"{self.LH.base_url}/api/{test_id}/docqa_evaluate_group"
             evaluation_data = benchmarks
@@ -68,3 +73,8 @@ class Evaluation:
                     "success": False,
                     "message": evaluation_response.json()["message"],
                 }
+        else:
+            return {
+                "success": False,
+                "message": test_create_response.json()["message"],
+            }
