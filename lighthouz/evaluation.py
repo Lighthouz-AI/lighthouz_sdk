@@ -100,7 +100,7 @@ class Evaluation:
             }
         evaluations = []
         for app_id, response_function in zip(app_ids, response_functions):
-            print(f"Evaluating on app {app_id}")
+            print(f"Evaluating on app: {app_id}")
             evaluation = self.evaluate_rag_model(benchmark_id, app_id, response_function)
             evaluations.append(evaluation)
             print()
