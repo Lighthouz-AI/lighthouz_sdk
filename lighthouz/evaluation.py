@@ -81,7 +81,7 @@ class Evaluation:
                 "evaluation": results,
                 "test_id": test_id,
                 "benchmark_id": benchmark_id,
-                "dashboard_url": f"https://lighthouz.ai/evaluation/{self.LH.lh_app_id}/{test_id}?api_key={self.LH.lh_api_key}",
+                "dashboard_url": f"https://lighthouz.ai/evaluation/{app_id}/{test_id}?api_key={self.LH.lh_api_key}",
             }
 
         else:
