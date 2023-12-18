@@ -2,9 +2,11 @@ import base64
 
 import requests
 
+from lighthouz import Lighthouz
+
 
 class Benchmark:
-    def __init__(self, LH):
+    def __init__(self, LH: Lighthouz):
         self.LH = LH
 
     def generate_rag_benchmark(self, file_path: str):

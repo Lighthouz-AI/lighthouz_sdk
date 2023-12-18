@@ -3,17 +3,18 @@ from typing import Callable
 import requests
 from marshmallow import ValidationError
 
+from lighthouz import Lighthouz
 from lighthouz.schema import benchmark_schema
 
 
 class Evaluation:
-    def __init__(self, LH):
+    def __init__(self, LH: Lighthouz):
         self.LH = LH
 
     def evaluate_rag_model(
-        self, response_function: Callable[[str], str], benchmark_id: str
+        self, benchmark_id: str, app_id: str, response_function: Callable[[str], str]
     ):
-        test_create_url = f"{self.LH.base_url}/apps/{self.LH.lh_app_id}/tests/create"
+        test_create_url = f"{self.LH.base_url}/apps/{app_id}/tests/create"
         test_create_data = {"status": "completed", "benchmark_id": benchmark_id}
         test_create_headers = {
             "api-key": self.LH.lh_api_key,
