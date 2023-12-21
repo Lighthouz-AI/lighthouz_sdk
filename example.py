@@ -1,7 +1,9 @@
 import os
 
 import requests
+
 from lighthouz import Lighthouz
+from lighthouz.benchmark import Benchmark
 from lighthouz.evaluation import Evaluation
 
 
@@ -80,6 +82,10 @@ def langchain_example_function(query: str) -> str:
 
 
 lh = Lighthouz("lighthouz-api-key")
+
+benchmark_generator = Benchmark(lh)
+benchmark = benchmark_generator.generate_rag_benchmark_from_folder("data")
+print(benchmark)
 
 evaluation = Evaluation(lh)
 # Apps can be created by visiting https://lighthouz.ai/dashboard
