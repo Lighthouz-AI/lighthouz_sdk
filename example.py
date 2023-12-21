@@ -82,7 +82,7 @@ def langchain_example_function(query: str) -> str:
 lh = Lighthouz("lighthouz-api-key")
 
 evaluation = Evaluation(lh)
-# Apps can be created by visiting https://lighthouz.ai/auth/login
+# Apps can be created by visiting https://lighthouz.ai/dashboard
 e_single = evaluation.evaluate_rag_model(
     response_function=langchain_example_function,
     benchmark_id="benchmark_id",
