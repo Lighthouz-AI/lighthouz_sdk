@@ -41,14 +41,21 @@ class Benchmark:
         else:
             return {"success": False, "message": "Folder does not exist"}
 
-        benchmarks = {
-            "success": True,
-            "results": {"benchmark": []},
+        inputs = []
+        for file_path in pdf_files:
+            with open(file_path, "rb") as pdf_file:
+                pdf_data = pdf_file.read()
+                pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
+                inputs.append(pdf_base64)
+
+        url = f"{self.LH.base_url}/api/multi_docqa_generate"
+        data = {"inputs": inputs}
+        headers = {
+            "api-key": self.LH.lh_api_key,
         }
-        for pdf_file in pdf_files:
-            response = self.generate_rag_benchmark_from_file(pdf_file)
-            if not response["success"]:
-                return response
-            else:
-                benchmarks["results"]["benchmark"] += response["results"]["benchmark"]
-        return benchmarks
+        response = requests.post(url, headers=headers, json=data)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {"success": False, "message": response.json()}
