@@ -1,4 +1,6 @@
 import base64
+import glob
+import os
 
 import requests
 
@@ -9,8 +11,11 @@ class Benchmark:
     def __init__(self, LH: Lighthouz):
         self.LH = LH
 
-    def generate_rag_benchmark(self, file_path: str):
-        # Read the PDF file and convert it to base64
+    def generate_rag_benchmark_from_file(self, file_path: str):
+        if not file_path.endswith(".pdf"):
+            return {"success": False, "message": "Only PDF files are supported"}
+        if not os.path.isfile(file_path):
+            return {"success": False, "message": "File does not exist"}
         with open(file_path, "rb") as pdf_file:
             pdf_data = pdf_file.read()
             pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
@@ -27,3 +32,23 @@ class Benchmark:
             return response.json()
         else:
             return {"success": False, "message": response.json()}
+
+    def generate_rag_benchmark_from_folder(self, folder_path: str):
+        if os.path.isdir(folder_path):
+            pdf_files = glob.glob(os.path.join(folder_path, "*.pdf"))
+            if len(pdf_files) == 0:
+                return {"success": False, "message": "No PDF files found in folder"}
+        else:
+            return {"success": False, "message": "Folder does not exist"}
+
+        benchmarks = {
+            "success": True,
+            "results": {"benchmark": []},
+        }
+        for pdf_file in pdf_files:
+            response = self.generate_rag_benchmark_from_file(pdf_file)
+            if not response["success"]:
+                return response
+            else:
+                benchmarks["results"]["benchmark"] += response["results"]["benchmark"]
+        return benchmarks

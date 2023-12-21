@@ -12,7 +12,7 @@ class Evaluation:
         self.LH = LH
 
     def evaluate_rag_model(
-            self, benchmark_id: str, app_id: str, response_function: Callable[[str], str]
+        self, benchmark_id: str, app_id: str, response_function: Callable[[str], str]
     ):
         test_create_url = f"{self.LH.base_url}/apps/{app_id}/tests/create"
         test_create_data = {"status": "completed", "benchmark_id": benchmark_id}
@@ -91,7 +91,10 @@ class Evaluation:
             }
 
     def evaluate_multiple_rag_models(
-            self, benchmark_id: str, app_ids: list[str], response_functions: list[Callable[[str], str]]
+        self,
+        benchmark_id: str,
+        app_ids: list[str],
+        response_functions: list[Callable[[str], str]],
     ):
         if len(app_ids) != len(response_functions):
             return {
@@ -101,7 +104,9 @@ class Evaluation:
         evaluations = []
         for app_id, response_function in zip(app_ids, response_functions):
             print(f"Evaluating on app: {app_id}")
-            evaluation = self.evaluate_rag_model(benchmark_id, app_id, response_function)
+            evaluation = self.evaluate_rag_model(
+                benchmark_id, app_id, response_function
+            )
             evaluations.append(evaluation)
             print()
 
