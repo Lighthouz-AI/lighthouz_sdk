@@ -47,7 +47,7 @@ def langchain_example_function(query: str) -> str:
     persist_directory = os.path.join(os.getcwd(), local_directory)
     documents = []
     for file in os.listdir(DOCUMENTS_FOLDER):
-        if file.endswith('.pdf'):
+        if file.endswith(".pdf"):
             pdf_path = os.path.join(DOCUMENTS_FOLDER, file)
             loader = PyPDFLoader(pdf_path)
             documents.extend(loader.load())

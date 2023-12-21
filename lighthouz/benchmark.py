@@ -46,7 +46,12 @@ class Benchmark:
             with open(file_path, "rb") as pdf_file:
                 pdf_data = pdf_file.read()
                 pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
-                inputs.append(pdf_base64)
+                inputs.append(
+                    {
+                        "input": pdf_base64,
+                        "filename": os.path.basename(file_path),
+                    }
+                )
 
         url = f"{self.LH.base_url}/api/multi_docqa_generate"
         data = {"inputs": inputs}
