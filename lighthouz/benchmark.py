@@ -21,7 +21,7 @@ class Benchmark:
             pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
 
         url = f"{self.LH.base_url}/api/docqa_generate"
-        data = {"input": pdf_base64}
+        data = {"input": pdf_base64, "filename": os.path.basename(file_path)}
         headers = {
             "api-key": self.LH.lh_api_key,
         }
