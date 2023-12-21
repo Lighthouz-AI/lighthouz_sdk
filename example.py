@@ -82,10 +82,13 @@ def langchain_example_function(query: str) -> str:
 
 
 lh = Lighthouz("lighthouz-api-key")
+# To obtain a Lighthouz API key contact srijan@lighthouz.ai
 
 benchmark_generator = Benchmark(lh)
 benchmark = benchmark_generator.generate_rag_benchmark_from_folder("data")
 print(benchmark)
+# Here you can get the benchmark_id
+# You can also generate benchmarks from https://lighthouz.ai/studio
 
 evaluation = Evaluation(lh)
 # Apps can be created by visiting https://lighthouz.ai/dashboard
