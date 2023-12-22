@@ -78,7 +78,7 @@ class Benchmark:
         self,
         benchmark_name: str,
         benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"],
-        puts: List[BenchmarkDetailSchema],
+        puts: List[dict],
     ):
         for put in puts:
             try:
