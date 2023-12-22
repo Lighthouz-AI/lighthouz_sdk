@@ -65,7 +65,7 @@ class Benchmark:
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
-            response = requests.post(url, headers=headers, json=data)
+            response = requests.put(url, headers=headers, json=data)
             if response.status_code != 200:
                 return {"success": False, "message": response.json()}
             print(f"Generated benchmark for {i+1} files: {pdf_files[i]}")
