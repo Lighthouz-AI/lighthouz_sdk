@@ -1,7 +1,7 @@
 import base64
 import glob
 import os
-from typing import List
+from typing import List, Literal
 
 import requests
 from marshmallow import ValidationError
@@ -77,7 +77,7 @@ class Benchmark:
     def upload_benchmark(
         self,
         benchmark_name: str,
-        benchmark_type: str,
+        benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"],
         puts: List[BenchmarkDetailSchema],
     ):
         for put in puts:
