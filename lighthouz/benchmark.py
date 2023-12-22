@@ -29,7 +29,8 @@ class Benchmark:
         response = requests.post(url, headers=headers, json=data)
 
         if response.status_code == 200:
-            return response.json()["benchmark_id"]
+            benchmark_id = response.json()["benchmark_id"]
+            return {"success": True, "benchmark_id": benchmark_id}
         else:
             return {"success": False, "message": response.json()}
 
@@ -53,14 +54,19 @@ class Benchmark:
                     }
                 )
         print("Generating benchmark for {} files".format(len(inputs)))
-        url = f"{self.LH.base_url}/api/multi_docqa_generate"
-        data = {"inputs": inputs}
-        headers = {
-            "api-key": self.LH.lh_api_key,
-        }
-        response = requests.post(url, headers=headers, json=data)
-
-        if response.status_code == 200:
-            return response.json()["benchmark_id"]
-        else:
-            return {"success": False, "message": response.json()}
+        response = self.generate_rag_benchmark_from_file(pdf_files[0])
+        if not response.get("success", False):
+            return response
+        print(f"Generated benchmark for 1 file: {pdf_files[0]}")
+        benchmark_id = response["benchmark_id"]
+        for i in range(1, len(inputs)):
+            url = f"{self.LH.base_url}/docqa_generate/{benchmark_id}"
+            data = inputs[i]
+            headers = {
+                "api-key": self.LH.lh_api_key,
+            }
+            response = requests.post(url, headers=headers, json=data)
+            if response.status_code != 200:
+                return {"success": False, "message": response.json()}
+            print(f"Generated benchmark for {i+1} files: {pdf_files[i]}")
+        return {"success": True, "benchmark_id": benchmark_id}
