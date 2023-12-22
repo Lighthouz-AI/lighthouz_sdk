@@ -1,7 +1,7 @@
 import base64
 import glob
 import os
-from typing import List, Literal
+from typing import List, Literal, Any
 
 import requests
 from marshmallow import ValidationError
@@ -78,7 +78,7 @@ class Benchmark:
         self,
         benchmark_name: str,
         benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"],
-        puts: List[dict],
+        puts: List[dict[str, Any]],
     ):
         for put in puts:
             try:

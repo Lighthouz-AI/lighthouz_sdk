@@ -16,7 +16,7 @@ class BenchmarkDetailSchema(Schema):
     query = fields.Str(required=True)
     expected_response = fields.Str(allow_none=True)
     context = fields.Str(allow_none=True)
-    put_type = fields.Str(allow_none=True)
+    put_type = fields.Str(allow_none=True, data_key="category")
     token_count = fields.Int(allow_none=True)
 
 
