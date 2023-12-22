@@ -60,7 +60,7 @@ class Benchmark:
         print(f"Generated benchmark for 1 file: {pdf_files[0]}")
         benchmark_id = response["benchmark_id"]
         for i in range(1, len(inputs)):
-            url = f"{self.LH.base_url}/docqa_generate/{benchmark_id}"
+            url = f"{self.LH.base_url}/api/docqa_generate/{benchmark_id}"
             data = inputs[i]
             headers = {
                 "api-key": self.LH.lh_api_key,
