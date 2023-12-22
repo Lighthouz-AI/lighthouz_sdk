@@ -42,28 +42,33 @@ def langchain_example_function(query: str) -> str:
     DOCUMENTS_FOLDER = "data"
     chunk_size = 2000
     chunk_overlap = 150
-    embeddings = OpenAIEmbeddings()
-    # setting up the vector db
     collection_name = "data-test_vect_embedding"
     local_directory = "data-test_vect_embedding"
     persist_directory = os.path.join(os.getcwd(), local_directory)
-    documents = []
-    for file in os.listdir(DOCUMENTS_FOLDER):
-        if file.endswith(".pdf"):
-            pdf_path = os.path.join(DOCUMENTS_FOLDER, file)
-            loader = PyPDFLoader(pdf_path)
-            documents.extend(loader.load())
-    text_splitter = TokenTextSplitter(
-        chunk_size=chunk_size, chunk_overlap=chunk_overlap
-    )
-    splitdocument = text_splitter.split_documents(documents)
-    vectDB = Chroma.from_documents(
-        splitdocument,
-        embeddings,
-        collection_name=collection_name,
-        persist_directory=persist_directory,
-    )
-    vectDB.persist()
+    if not os.path.exists(persist_directory) or not os.listdir(persist_directory):
+        embeddings = OpenAIEmbeddings()
+        documents = []
+        for file in os.listdir(DOCUMENTS_FOLDER):
+            if file.endswith(".pdf"):
+                pdf_path = os.path.join(DOCUMENTS_FOLDER, file)
+                loader = PyPDFLoader(pdf_path)
+                documents.extend(loader.load())
+        text_splitter = TokenTextSplitter(
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap
+        )
+        splitdocument = text_splitter.split_documents(documents)
+        vectDB = Chroma.from_documents(
+            splitdocument,
+            embeddings,
+            collection_name=collection_name,
+            persist_directory=persist_directory,
+        )
+        vectDB.persist()
+    else:
+        # Load the existing vector store
+        vectDB = Chroma.load(
+            collection_name=collection_name, persist_directory=persist_directory
+        )
     # main RAG framework
     openai_model = ChatOpenAI(
         model_name="gpt-3.5-turbo-16k",
