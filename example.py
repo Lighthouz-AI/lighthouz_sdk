@@ -85,8 +85,8 @@ lh = Lighthouz("lighthouz-api-key")
 # To obtain a Lighthouz API key contact srijan@lighthouz.ai
 
 benchmark_generator = Benchmark(lh)
-benchmark = benchmark_generator.generate_rag_benchmark_from_folder("data")
-print(benchmark)
+benchmark_id = benchmark_generator.generate_rag_benchmark_from_folder("data")
+print(benchmark_id)
 # Here you can get the benchmark_id
 # You can also generate benchmarks from https://lighthouz.ai/studio
 
