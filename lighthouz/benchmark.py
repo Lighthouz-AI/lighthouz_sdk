@@ -96,6 +96,6 @@ class Benchmark:
         }
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
-            return {"success": True, "message": response.json()}
+            return response
         else:
             return {"success": False, "message": response.json()}
