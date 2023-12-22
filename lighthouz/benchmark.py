@@ -52,7 +52,7 @@ class Benchmark:
                         "filename": os.path.basename(file_path),
                     }
                 )
-
+        print("Generating benchmark for {} files".format(len(inputs)))
         url = f"{self.LH.base_url}/api/multi_docqa_generate"
         data = {"inputs": inputs}
         headers = {
@@ -61,6 +61,6 @@ class Benchmark:
         response = requests.post(url, headers=headers, json=data)
 
         if response.status_code == 200:
-            return response.json()
+            return response.json()["benchmark_id"]
         else:
             return {"success": False, "message": response.json()}

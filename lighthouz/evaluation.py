@@ -36,12 +36,6 @@ class Evaluation:
                     "success": False,
                     "message": benchmark_response.json()["message"],
                 }
-            try:
-                for benchmark in benchmarks:
-                    # print(benchmark)
-                    benchmark_schema.load(benchmark)
-            except ValidationError as err:
-                return {"success": False, "message": err.messages}
 
             print(f"Evaluating on {len(benchmarks)} benchmark(s).")
             results = []
