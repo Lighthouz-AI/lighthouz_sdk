@@ -80,10 +80,9 @@ class Benchmark:
         benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"],
         puts: List[dict[str, Any]],
     ):
-        for i, put in enumerate(puts):
+        for put in puts:
             try:
-                put_modified = benchmark_schema.load(put)
-                puts[i] = put_modified
+                benchmark_schema.load(put)
             except ValidationError as e:
                 return {"success": False, "message": str(e)}
         url = f"{self.LH.base_url}/apps/benchmarks/create"
