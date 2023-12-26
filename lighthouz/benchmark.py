@@ -1,10 +1,13 @@
 import base64
 import glob
 import os
+from typing import List, Literal, Any
 
 import requests
+from marshmallow import ValidationError
 
 from lighthouz import Lighthouz
+from lighthouz.schema import BenchmarkDetailSchema, benchmark_schema
 
 
 class Benchmark:
@@ -68,5 +71,31 @@ class Benchmark:
             response = requests.put(url, headers=headers, json=data)
             if response.status_code != 200:
                 return {"success": False, "message": response.json()}
-            print(f"Generated benchmark for {i+1} files: {pdf_files[i]}")
+            print(f"Generated benchmark for {i + 1} files: {pdf_files[i]}")
         return {"success": True, "benchmark_id": benchmark_id}
+
+    def upload_benchmark(
+        self,
+        benchmark_name: str,
+        benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"],
+        puts: List[dict[str, Any]],
+    ):
+        for put in puts:
+            try:
+                benchmark_schema.load(put)
+            except ValidationError as e:
+                return {"success": False, "message": str(e)}
+        url = f"{self.LH.base_url}/apps/benchmarks/create"
+        headers = {
+            "api-key": self.LH.lh_api_key,
+        }
+        data = {
+            "name": benchmark_name,
+            "benchmark_type": benchmark_type,
+            "benchmark": puts,
+        }
+        response = requests.post(url, headers=headers, json=data)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {"success": False, "message": response.json()}
