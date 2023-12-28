@@ -1,10 +1,8 @@
 from typing import Callable
 
 import requests
-from marshmallow import ValidationError
 
 from lighthouz import Lighthouz
-from lighthouz.schema import benchmark_schema
 
 
 class Evaluation:
@@ -45,11 +43,14 @@ class Evaluation:
                         benchmark["query"]
                     )
                 except Exception as e:
-                    return {
-                        "success": False,
-                        "message": str(e),
-                        "type": "User response function",
-                    }
+                    print(
+                        {
+                            "success": False,
+                            "message": str(e),
+                            "type": "User response function error",
+                        }
+                    )
+                    continue
                 evaluation_url = (
                     f"{self.LH.base_url}/api/{test_id}/docqa_evaluate_single"
                 )
