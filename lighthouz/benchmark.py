@@ -23,8 +23,11 @@ class Benchmark:
             pdf_data = pdf_file.read()
             pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
 
-        url = f"{self.LH.base_url}/api/docqa_generate"
-        data = {"input": pdf_base64, "filename": os.path.basename(file_path)}
+        url = f"{self.LH.base_url}/api/generate_benchmark"
+        data = {"input": pdf_base64, 
+            #   "benchmarks": ["rag_benchmark"], 
+              "benchmarks": ["rag_benchmark", "out_of_context", "prompt_injection", "pii_leak"],
+              "filename": os.path.basename(file_path)}
         headers = {
             "api-key": self.LH.lh_api_key,
         }
@@ -36,7 +39,7 @@ class Benchmark:
             return {"success": True, "benchmark_id": benchmark_id}
         else:
             return {"success": False, "message": response.json()}
-
+    
     def generate_rag_benchmark_from_folder(self, folder_path: str):
         if os.path.isdir(folder_path):
             pdf_files = glob.glob(os.path.join(folder_path, "*.pdf"))
@@ -74,6 +77,7 @@ class Benchmark:
             print(f"Generated benchmark for {i + 1} files: {pdf_files[i]}")
         return {"success": True, "benchmark_id": benchmark_id}
 
+    
     def upload_benchmark(
         self,
         benchmark_name: str,
