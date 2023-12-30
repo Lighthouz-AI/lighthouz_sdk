@@ -1,13 +1,13 @@
 import base64
 import glob
 import os
-from typing import List, Literal, Any
+from typing import Any, List, Literal
 
 import requests
 from marshmallow import ValidationError
 
 from lighthouz import Lighthouz
-from lighthouz.schema import BenchmarkDetailSchema, benchmark_schema
+from lighthouz.schema import benchmark_schema
 
 
 class Benchmark:
