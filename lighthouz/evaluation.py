@@ -22,7 +22,7 @@ class Evaluation:
         )
         if test_create_response.status_code == 200:
             test_id = test_create_response.json()["test_id"]
-            benchmark_url = f"{self.LH.base_url}/apps/benchmarks/{benchmark_id}"
+            benchmark_url = f"{self.LH.base_url}/benchmarks/{benchmark_id}"
             benchmark_headers = {
                 "api-key": self.LH.lh_api_key,
             }
