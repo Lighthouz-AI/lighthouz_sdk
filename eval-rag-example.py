@@ -118,7 +118,7 @@ e_single = evaluation.evaluate_rag_model(
 print(e_single)
 
 e_multiple = evaluation.evaluate_multiple_rag_models(
-    response_functions=[langchain_example_function, hf_example_function],
+    response_functions=[langchain_query_function, hf_example_function],
     benchmark_id="BENCHMARK_ID",
     app_ids=["APP_ID1", "APP_ID2"],
 )
