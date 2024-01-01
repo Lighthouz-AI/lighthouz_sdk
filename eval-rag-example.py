@@ -26,7 +26,7 @@ def hf_example_function(query: str) -> str:
         "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf"
     )
     API_KEY = "hf_xx"
-    headers = {f"Authorization": f"Bearer {HF_API_KEY}"}
+    headers = {f"Authorization": f"Bearer {API_KEY}"}
     payload = {"inputs": query, }
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()[0]["generated_text"]
