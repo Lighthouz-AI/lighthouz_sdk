@@ -35,7 +35,7 @@ class Evaluation:
                     "message": benchmark_response.json()["message"],
                 }
 
-            print(f"Evaluating on {len(benchmarks)} benchmark(s).")
+            print(f"Evaluating on {len(benchmarks)} test case(s).")
             results = []
             for idx, benchmark in enumerate(benchmarks):
                 try:
@@ -47,7 +47,7 @@ class Evaluation:
                         {
                             "success": False,
                             "message": str(e),
-                            "type": "User response function error",
+                            "type": "User response function error. Please check that you have provided a function that can take a query as an input.",
                         }
                     )
                     continue
@@ -64,22 +64,21 @@ class Evaluation:
                 if evaluation_response.status_code == 200:
                     evaluation = evaluation_response.json()
                     results.append(evaluation)
-                    print(f"Evaluated on benchmark {idx + 1}/{len(benchmarks)}")
+                    print(f"Evaluated on test {idx + 1}/{len(benchmarks)}")
                 else:
-                    print("error")
-                    return {
-                        "success": False,
-                        "message": evaluation_response.json()["message"],
-                    }
+                    print("Error when evaluating test {idx + 1}/{len(benchmarks)}. Skipping.")
+                    
+            print(f"Evaluation on benchmark {benchmark_id} is complete. The results can be viewed at https://lighthouz.ai/evaluation/{app_id}/{test_id}?api_key={self.LH.lh_api_key}.")
             return {
                 "success": True,
-                "evaluation": results,
+                # "evaluation": results,
                 "test_id": test_id,
                 "benchmark_id": benchmark_id,
                 "dashboard_url": f"https://lighthouz.ai/evaluation/{app_id}/{test_id}?api_key={self.LH.lh_api_key}",
             }
 
         else:
+            print("An error has occurred: ", test_create_response.json()["message"])
             return {
                 "success": False,
                 "message": test_create_response.json()["message"],
@@ -98,7 +97,7 @@ class Evaluation:
             }
         evaluations = []
         for app_id, response_function in zip(app_ids, response_functions):
-            print(f"Evaluating on app: {app_id}")
+            print(f"Evaluating app {app_id} on the benchmark {benchmark_id}")
             evaluation = self.evaluate_rag_model(
                 benchmark_id, app_id, response_function
             )

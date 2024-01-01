@@ -21,7 +21,6 @@ from langchain.prompts import PromptTemplate
 
 os.environ["OPENAI_API_KEY"] = "sk-xx"
 
-
 def hf_example_function(query: str) -> str:
     API_URL = (
         "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf"
@@ -35,12 +34,46 @@ def hf_example_function(query: str) -> str:
 def langchain_llm_model():
     print("Initializing LangChain RAG Agent")
 
+    DOCUMENTS_FOLDER = "FOLDER_NAME_OF_DOCUMENTS_TO_BUILD_RAG"
+    chunk_size = 2000
+    chunk_overlap = 150
+    collection_name = "data-test_vect_embedding"
+    local_directory = "data-test_vect_embedding"
+    persist_directory = os.path.join(os.getcwd(), local_directory)
+    if not os.path.exists(persist_directory) or not os.listdir(persist_directory):
+        embeddings = OpenAIEmbeddings()
+        documents = []
+        for file in os.listdir(DOCUMENTS_FOLDER):
+            if file.endswith(".pdf"):
+                pdf_path = os.path.join(DOCUMENTS_FOLDER, file)
+                loader = PyPDFLoader(pdf_path)
+                documents.extend(loader.load())
+        text_splitter = TokenTextSplitter(
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap
+        )
+        splitdocument = text_splitter.split_documents(documents)
+        vectDB = Chroma.from_documents(
+            splitdocument,
+            embeddings,
+            collection_name=collection_name,
+            persist_directory=persist_directory,
+        )
+        vectDB.persist()
+    else:
+        # Load the existing vector store
+        embeddings = OpenAIEmbeddings()
+        vectDB = Chroma(
+            collection_name=collection_name, persist_directory=persist_directory, embedding_function=embeddings
+        )
+
     # main RAG framework
     llm_model = ChatOpenAI(
         model_name="gpt-3.5-turbo",
         temperature=0,
         request_timeout=120,
         )
+
+    retriever = vectDB.as_retriever(return_source_document=True)
 
     # prepare stuff prompt template
     template = """You are a helpful financial assistant. Your job is to provide the answer for the question based on the given context. 
@@ -60,6 +93,7 @@ def langchain_llm_model():
         return_source_documents=False,
         chain_type_kwargs={"prompt":prompt}
     )
+    print("Langchain RAG agent has been initialized.")
     return rag_model
 
 

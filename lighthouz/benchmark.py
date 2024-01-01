@@ -1,11 +1,7 @@
 import base64
 import glob
 import os
-<<<<<<< HEAD
-from typing import Any, List, Literal
-=======
 from typing import List, Literal, Any, Optional
->>>>>>> f8c6b6d (updated backend API calls)
 
 import requests
 from marshmallow import ValidationError
@@ -18,81 +14,15 @@ class Benchmark:
     def __init__(self, LH: Lighthouz):
         self.LH = LH
 
-<<<<<<< HEAD
-    def generate_rag_benchmark_from_file(self, file_path: str):
-        if not file_path.endswith(".pdf"):
-            return {"success": False, "message": "Only PDF files are supported"}
-        if not os.path.isfile(file_path):
-            return {"success": False, "message": "File does not exist"}
-        with open(file_path, "rb") as pdf_file:
-            pdf_data = pdf_file.read()
-            pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
-
-        url = f"{self.LH.base_url}/api/generate_benchmark"
-        data = {
-            "input": pdf_base64,
-            #   "benchmarks": ["rag_benchmark"],
-            "benchmarks": [
-                "rag_benchmark",
-                "out_of_context",
-                "prompt_injection",
-                "pii_leak",
-            ],
-            "filename": os.path.basename(file_path),
-        }
-        headers = {
-            "api-key": self.LH.lh_api_key,
-        }
-
-        response = requests.post(url, headers=headers, json=data)
-
-        if response.status_code == 200:
-            benchmark_id = response.json()["benchmark_id"]
-            return {"success": True, "benchmark_id": benchmark_id}
-        else:
-            return {"success": False, "message": response.json()}
-
-    def generate_rag_benchmark_from_folder(self, folder_path: str):
-        if os.path.isdir(folder_path):
-            pdf_files = glob.glob(os.path.join(folder_path, "*.pdf"))
-            if len(pdf_files) == 0:
-                return {"success": False, "message": "No PDF files found in folder"}
-        else:
-            return {"success": False, "message": "Folder does not exist"}
-
-        inputs = []
-        for file_path in pdf_files:
-            with open(file_path, "rb") as pdf_file:
-                pdf_data = pdf_file.read()
-                pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
-                inputs.append(
-                    {
-                        "input": pdf_base64,
-                        "filename": os.path.basename(file_path),
-                    }
-                )
-        print("Generating benchmark for {} files".format(len(inputs)))
-        response = self.generate_rag_benchmark_from_file(pdf_files[0])
-        if not response.get("success", False):
-            return response
-        print(f"Generated benchmark for 1 file: {pdf_files[0]}")
-        benchmark_id = response["benchmark_id"]
-        for i in range(1, len(inputs)):
-            url = f"{self.LH.base_url}/api/docqa_generate/{benchmark_id}"
-            data = inputs[i]
-=======
     def generate_benchmark(self, benchmarks: List[str], file_path: Optional[str] = None, folder_path: Optional[str] = None):
         print("Generating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
             url = f"{self.LH.base_url}/benchmarks/generate"
             data = {"benchmarks": benchmarks}
->>>>>>> f8c6b6d (updated backend API calls)
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
 
-<<<<<<< HEAD
-=======
             response = requests.post(url, headers=headers, json=data)
 
             if response.status_code == 200:
@@ -297,7 +227,6 @@ class Benchmark:
             print("Success! The benchmark has been updated. The id is still the same: ", benchmark_id)
             return {"success": True, "benchmark_id": benchmark_id}
     
->>>>>>> f8c6b6d (updated backend API calls)
     def upload_benchmark(
         self,
         benchmark_name: str,
