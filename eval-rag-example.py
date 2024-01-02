@@ -18,7 +18,6 @@ from langchain.llms import HuggingFaceHub, HuggingFaceEndpoint
 from langchain import HuggingFacePipeline
 from langchain.prompts import PromptTemplate
 
-
 os.environ["OPENAI_API_KEY"] = "sk-xx"
 
 def hf_example_function(query: str) -> str:
@@ -34,7 +33,8 @@ def hf_example_function(query: str) -> str:
 def langchain_llm_model():
     print("Initializing LangChain RAG Agent")
 
-    DOCUMENTS_FOLDER = "FOLDER_NAME_OF_DOCUMENTS_TO_BUILD_RAG"
+    # DOCUMENTS_FOLDER = "FOLDER_NAME_OF_DOCUMENTS_TO_BUILD_RAG"
+    DOCUMENTS_FOLDER = "DATA"
     chunk_size = 2000
     chunk_overlap = 150
     collection_name = "data-test_vect_embedding"
@@ -100,7 +100,6 @@ def langchain_llm_model():
 def langchain_query_function(query: str) -> str:
     response = rag_model({"query": query})["result"]
     return response
-
 
 lh = Lighthouz("LH_API_KEY") # To obtain a Lighthouz API key contact srijan@lighthouz.ai
 
