@@ -230,8 +230,8 @@ class Benchmark:
     def upload_benchmark(
         self,
         benchmark_name: str,
-        benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"],
         puts: List[dict[str, Any]],
+        benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
     ):
         for put in puts:
             try:
