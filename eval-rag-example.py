@@ -40,8 +40,7 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
         embeddings = OpenAIEmbeddings()
         documents = []
         if RAG_DOCUMENT.endswith(".pdf"): 
-            pdf_path = os.path.join(RAG_DOCUMENT, file)
-            loader = PyPDFLoader(pdf_path)
+            loader = PyPDFLoader(RAG_DOCUMENT)
             documents.extend(loader.load())
         else:
             for file in os.listdir(RAG_DOCUMENT):
