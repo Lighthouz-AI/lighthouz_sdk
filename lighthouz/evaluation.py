@@ -1,5 +1,5 @@
 from typing import Callable
-
+import webbrowser
 import requests
 
 from lighthouz import Lighthouz
@@ -68,7 +68,9 @@ class Evaluation:
                 else:
                     print("Error when evaluating test {idx + 1}/{len(benchmarks)}. Skipping.")
                     
-            print(f"Evaluation on benchmark {benchmark_id} is complete. The results can be viewed at https://lighthouz.ai/evaluation/{app_id}/{test_id}?api_key={self.LH.lh_api_key}.")
+            results_url = "https://lighthouz.ai/evaluation/{app_id}/{test_id}?api_key={self.LH.lh_api_key}"
+            print(f"Evaluation on benchmark {benchmark_id} is complete. The results can be viewed at ", results_url)
+            webbrowser.open(results_url)
             return {
                 "success": True,
                 # "evaluation": results,
