@@ -47,7 +47,8 @@ class Evaluation:
                         {
                             "success": False,
                             "message": str(e),
-                            "type": "User response function error. Please check that you have provided a function that can take a query as an input.",
+                            "type": "User response function error. Please check that you have provided a function "
+                            "that can take a query as an input.",
                         }
                     )
                     continue
@@ -66,9 +67,13 @@ class Evaluation:
                     results.append(evaluation)
                     print(f"Evaluated on test {idx + 1}/{len(benchmarks)}")
                 else:
-                    print("Error when evaluating test {idx + 1}/{len(benchmarks)}. Skipping.")
-                    
-            print(f"Evaluation on benchmark {benchmark_id} is complete. The results can be viewed at https://lighthouz.ai/evaluation/{app_id}/{test_id}?api_key={self.LH.lh_api_key}.")
+                    print(
+                        "Error when evaluating test {idx + 1}/{len(benchmarks)}. Skipping."
+                    )
+
+            print(
+                f"Evaluation on benchmark {benchmark_id} is complete. The results can be viewed at https://lighthouz.ai/evaluation/{app_id}/{test_id}?api_key={self.LH.lh_api_key}."
+            )
             return {
                 "success": True,
                 # "evaluation": results,

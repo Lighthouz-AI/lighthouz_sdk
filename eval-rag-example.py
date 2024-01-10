@@ -1,24 +1,23 @@
 import os
 
 import requests
+from langchain import HuggingFacePipeline
+from langchain.chains import RetrievalQA
+from langchain.chat_models import ChatOpenAI
+from langchain.document_loaders import PyPDFLoader
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.llms import HuggingFaceEndpoint, HuggingFaceHub
+from langchain.prompts import PromptTemplate
+from langchain.text_splitter import TokenTextSplitter
+from langchain.vectorstores.chroma import Chroma
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 from lighthouz import Lighthouz
 from lighthouz.benchmark import Benchmark
 from lighthouz.evaluation import Evaluation
 
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-
-from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.text_splitter import TokenTextSplitter
-from langchain.vectorstores.chroma import Chroma
-from langchain.llms import HuggingFaceHub, HuggingFaceEndpoint
-from langchain import HuggingFacePipeline
-from langchain.prompts import PromptTemplate
-
 os.environ["OPENAI_API_KEY"] = "sk-xx"
+
 
 def hf_example_function(query: str) -> str:
     API_URL = (
@@ -26,9 +25,12 @@ def hf_example_function(query: str) -> str:
     )
     API_KEY = "hf_xx"
     headers = {f"Authorization": f"Bearer {API_KEY}"}
-    payload = {"inputs": query, }
+    payload = {
+        "inputs": query,
+    }
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()[0]["generated_text"]
+
 
 def langchain_llm_model():
     print("Initializing LangChain RAG Agent")
@@ -63,7 +65,9 @@ def langchain_llm_model():
         # Load the existing vector store
         embeddings = OpenAIEmbeddings()
         vectDB = Chroma(
-            collection_name=collection_name, persist_directory=persist_directory, embedding_function=embeddings
+            collection_name=collection_name,
+            persist_directory=persist_directory,
+            embedding_function=embeddings,
         )
 
     # main RAG framework
@@ -71,7 +75,7 @@ def langchain_llm_model():
         model_name="gpt-3.5-turbo",
         temperature=0,
         request_timeout=120,
-        )
+    )
 
     retriever = vectDB.as_retriever(return_source_document=True)
 
@@ -81,17 +85,14 @@ def langchain_llm_model():
     ## QUESTION: {question}
     ## ANSWER: """.strip()
 
-    prompt = PromptTemplate(
-        input_variables=["context", "question"],
-        template=template
-    )
+    prompt = PromptTemplate(input_variables=["context", "question"], template=template)
 
     rag_model = RetrievalQA.from_chain_type(
         llm=llm_model,
         retriever=retriever,
         chain_type="stuff",
         return_source_documents=False,
-        chain_type_kwargs={"prompt":prompt}
+        chain_type_kwargs={"prompt": prompt},
     )
     print("Langchain RAG agent has been initialized.")
     return rag_model
@@ -101,18 +102,24 @@ def langchain_query_function(query: str) -> str:
     response = rag_model({"query": query})["result"]
     return response
 
-lh = Lighthouz("LH_API_KEY") # To obtain a Lighthouz API key contact srijan@lighthouz.ai
+
+lh = Lighthouz(
+    "LH_API_KEY"
+)  # To obtain a Lighthouz API key contact srijan@lighthouz.ai
 
 benchmark_generator = Benchmark(lh)
-benchmark_generator.generate_benchmark(file_path="ENTER_FILENAME_TO_GENERATE_RAG_BENCHMARK", benchmarks=["rag_benchmark", "out_of_context", "pii_leak", "prompt_injection"]) # You can also generate benchmarks from https://lighthouz.ai/studio
+benchmark_generator.generate_benchmark(
+    file_path="ENTER_FILENAME_TO_GENERATE_RAG_BENCHMARK",
+    benchmarks=["rag_benchmark", "out_of_context", "pii_leak", "prompt_injection"],
+)  # You can also generate benchmarks from https://lighthouz.ai/studio
 
 rag_model = langchain_llm_model()
 
 evaluation = Evaluation(lh)
 e_single = evaluation.evaluate_rag_model(
     response_function=langchain_query_function,
-    benchmark_id="BENCHMARK_ID", # Enter the benchmark id from above or enter a previous benchmark id. Benchmark ids are on the dashboard https://lighthouz.ai/benchmarks/
-    app_id="APP_ID", # App can be created on the dashboard at https://lighthouz.ai/dashboard/
+    benchmark_id="BENCHMARK_ID",  # Enter the benchmark id from above or enter a previous benchmark id. Benchmark ids are on the dashboard https://lighthouz.ai/benchmarks/
+    app_id="APP_ID",  # App can be created on the dashboard at https://lighthouz.ai/dashboard/
 )
 print(e_single)
 

@@ -3,7 +3,14 @@ from marshmallow import Schema, fields
 
 class BenchmarkDetailSchema(Schema):
     class Meta:
-        fields = ("query", "expected_response", "context", "put_type", "token_count", "filename")
+        fields = (
+            "query",
+            "expected_response",
+            "context",
+            "put_type",
+            "token_count",
+            "filename",
+        )
 
     query = fields.Str(required=True)
     expected_response = fields.Str(allow_none=True)
