@@ -1,5 +1,6 @@
-from typing import Callable
 import webbrowser
+from typing import Callable
+
 import requests
 
 from lighthouz import Lighthouz
@@ -47,7 +48,8 @@ class Evaluation:
                         {
                             "success": False,
                             "message": str(e),
-                            "type": "User response function error. Please check that you have provided a function that can take a query as an input.",
+                            "type": "User response function error. Please check that you have provided a function "
+                            "that can take a query as an input.",
                         }
                     )
                     continue

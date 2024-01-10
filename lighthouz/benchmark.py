@@ -1,7 +1,7 @@
 import base64
 import glob
 import os
-from typing import List, Literal, Any, Optional
+from typing import Any, List, Literal, Optional
 
 import requests
 from marshmallow import ValidationError

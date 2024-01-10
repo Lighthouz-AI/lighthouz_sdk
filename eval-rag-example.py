@@ -1,21 +1,21 @@
 import os
+
 import requests
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from langchain import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader
 from langchain.embeddings import OpenAIEmbeddings
+from langchain.llms import HuggingFaceEndpoint, HuggingFaceHub
+from langchain.prompts import PromptTemplate
 from langchain.text_splitter import TokenTextSplitter
 from langchain.vectorstores.chroma import Chroma
-from langchain.llms import HuggingFaceHub, HuggingFaceEndpoint
-from langchain import HuggingFacePipeline
-from langchain.prompts import PromptTemplate
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 from lighthouz import Lighthouz
 from lighthouz.app import App
 from lighthouz.benchmark import Benchmark
 from lighthouz.evaluation import Evaluation
-
 
 ## SET VARIABLES
 os.environ["OPENAI_API_KEY"] = ""  # Enter your OpenAI key to be used in the RAG model
