@@ -23,7 +23,7 @@ RAG_DOCUMENT = "DATA_FOLDER/FILENAME_TO_GENERATE_RAG_BENCHMARK" # Enter the file
 # RAG_DOCUMENT = "EXAMPLE-DATA/apple-10Q-Q2-2022.pdf" 
 
 lh = Lighthouz("LH-API-KEY") # To obtain a Lighthouz API key contact srijan@lighthouz.ai
-benchmark_category = ["rag_benchmark", "prompt_variation", "out_of_context", "pii_leak", "prompt_injection"] # list of benchmarks to be created 
+benchmark_category = ["rag_benchmark", "out_of_context", "pii_leak", "prompt_injection"] # list of benchmarks to be created 
 
 def langchain_rag_model(llm="gpt-3.5-turbo"):
     """
