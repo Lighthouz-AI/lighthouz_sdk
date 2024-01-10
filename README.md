@@ -1,7 +1,6 @@
 ## Installation
 ```pip install git+https://github.com/Lighthouz-AI/lighthouz_sdk```
 
-```pip install -r requirements.txt```
 
 ## Usage
 
