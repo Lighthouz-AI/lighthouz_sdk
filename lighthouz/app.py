@@ -4,13 +4,19 @@ import requests
 
 from lighthouz import Lighthouz
 
+
 class App:
     def __init__(self, LH: Lighthouz):
         self.LH = LH
-    
-    def register(self, model: str = "", name: str = "", description: Optional[str] = "",
-               app_type: Optional[str] = "", endpoint: Optional[str] = ""):
-        
+
+    def register(
+        self,
+        model: str = "",
+        name: str = "",
+        description: Optional[str] = "",
+        app_type: Optional[str] = "",
+        endpoint: Optional[str] = "",
+    ):
         url = f"{self.LH.base_url}/apps/create"
         headers = {
             "api-key": self.LH.lh_api_key,
@@ -20,7 +26,7 @@ class App:
             "model": model,
             "description": description,
             "app_type": app_type,
-            "endpoint": endpoint
+            "endpoint": endpoint,
         }
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:

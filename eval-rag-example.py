@@ -18,12 +18,20 @@ from lighthouz.evaluation import Evaluation
 
 
 ## SET VARIABLES
-os.environ["OPENAI_API_KEY"] = "" # Enter your OpenAI key to be used in the RAG model
-RAG_DOCUMENT = "DATA_FOLDER/FILENAME_TO_GENERATE_RAG_BENCHMARK" # Enter the file name where RAG data is present, example EXAMPLE-DATA/apple-10Q-Q2-2022.pdf
-# RAG_DOCUMENT = "EXAMPLE-DATA/apple-10Q-Q2-2022.pdf" 
+os.environ["OPENAI_API_KEY"] = ""  # Enter your OpenAI key to be used in the RAG model
+RAG_DOCUMENT = "DATA_FOLDER/FILENAME_TO_GENERATE_RAG_BENCHMARK"  # Enter the file name where RAG data is present, example EXAMPLE-DATA/apple-10Q-Q2-2022.pdf
+# RAG_DOCUMENT = "EXAMPLE-DATA/apple-10Q-Q2-2022.pdf"
 
-lh = Lighthouz("LH-API-KEY") # To obtain a Lighthouz API key contact srijan@lighthouz.ai
-benchmark_category = ["rag_benchmark", "out_of_context", "pii_leak", "prompt_injection"] # list of benchmarks to be created 
+lh = Lighthouz(
+    "LH-API-KEY"
+)  # To obtain a Lighthouz API key contact srijan@lighthouz.ai
+benchmark_category = [
+    "rag_benchmark",
+    "out_of_context",
+    "pii_leak",
+    "prompt_injection",
+]  # list of benchmarks to be created
+
 
 def langchain_rag_model(llm="gpt-3.5-turbo"):
     """
@@ -39,7 +47,7 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
     if not os.path.exists(persist_directory) or not os.listdir(persist_directory):
         embeddings = OpenAIEmbeddings()
         documents = []
-        if RAG_DOCUMENT.endswith(".pdf"): 
+        if RAG_DOCUMENT.endswith(".pdf"):
             loader = PyPDFLoader(RAG_DOCUMENT)
             documents.extend(loader.load())
         else:
@@ -63,22 +71,24 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
         # Load the existing vector store
         embeddings = OpenAIEmbeddings()
         vectDB = Chroma(
-            collection_name=collection_name, persist_directory=persist_directory, embedding_function=embeddings
+            collection_name=collection_name,
+            persist_directory=persist_directory,
+            embedding_function=embeddings,
         )
 
     # LLM used in RAG
-    if llm =="gpt-3.5-turbo":
+    if llm == "gpt-3.5-turbo":
         llm_model = ChatOpenAI(
-        model_name="gpt-3.5-turbo",
-        temperature=0,
-        request_timeout=120,
+            model_name="gpt-3.5-turbo",
+            temperature=0,
+            request_timeout=120,
         )
-    elif llm == "gpt-4": 
+    elif llm == "gpt-4":
         llm_model = ChatOpenAI(
             model_name="gpt-4",
             temperature=0,
             request_timeout=120,
-            )
+        )
 
     retriever = vectDB.as_retriever(return_source_document=True)
 
@@ -89,8 +99,7 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
     ## ANSWER: """.strip()
 
     prompt = PromptTemplate(
-        input_variables=["context", "question"],
-        template=prompt_template
+        input_variables=["context", "question"], template=prompt_template
     )
 
     rag_model = RetrievalQA.from_chain_type(
@@ -98,7 +107,7 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
         retriever=retriever,
         chain_type="stuff",
         return_source_documents=False,
-        chain_type_kwargs={"prompt":prompt}
+        chain_type_kwargs={"prompt": prompt},
     )
     print("Langchain RAG OpenAI agent has been initialized.")
     return rag_model
@@ -106,15 +115,16 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
 
 def langchain_rag_query_function(query: str) -> str:
     """
-    This is a function to send queries to the RAG model 
+    This is a function to send queries to the RAG model
     """
     response = rag_model({"query": query})["result"]
     return response
 
+
 rag_model = langchain_rag_model(llm="gpt-3.5-turbo")
 
 
-## Register application. 
+## Register application.
 ### Note: Only register an application once to track all its evals one place. After first registration, use its app_id
 app = App(lh)
 app_data = app.register(name="gpt-3.5-turbo", model="gpt-3.5-turbo")
@@ -122,22 +132,25 @@ app_id = app_data["app_id"]
 
 ## Generate benchmark
 benchmark_generator = Benchmark(lh)
-benchmark_data = benchmark_generator.generate_benchmark(file_path=RAG_DOCUMENT, benchmark_category=benchmark_category) 
+benchmark_data = benchmark_generator.generate_benchmark(
+    file_path=RAG_DOCUMENT, benchmark_category=benchmark_category
+)
 benchmark_id = benchmark_data["benchmark_id"]
 
 ## Run evaluations on a benchmark
 evaluation = Evaluation(lh)
 e_single = evaluation.evaluate_rag_model(
     response_function=langchain_rag_query_function,
-    benchmark_id=benchmark_id, # You can also enter an existing benchmark id. Benchmark ids are on the dashboard: https://lighthouz.ai/benchmarks/
-    app_id=app_id, 
+    benchmark_id=benchmark_id,  # You can also enter an existing benchmark id. Benchmark ids are on the dashboard: https://lighthouz.ai/benchmarks/
+    app_id=app_id,
 )
 print(e_single)
 
 
-## Compare multiple models on a benchmark 
+## Compare multiple models on a benchmark
 ### First creating another RAG model using gpt-4
 rag_model_gpt4 = langchain_rag_model(llm="gpt-4")
+
 
 def langchain_rag_query_function_gpt4(query: str) -> str:
     """
@@ -146,12 +159,16 @@ def langchain_rag_query_function_gpt4(query: str) -> str:
     response = rag_model_gpt4({"query": query})["result"]
     return response
 
+
 app = App(lh)
 app_data = app.register(name="gpt-4", model="gpt-4")
 app_id_gpt4 = app_data["app_id"]
 
 e_multiple = evaluation.evaluate_multiple_rag_models(
-    response_functions=[langchain_rag_query_function, langchain_rag_query_function_gpt4],
+    response_functions=[
+        langchain_rag_query_function,
+        langchain_rag_query_function_gpt4,
+    ],
     benchmark_id=benchmark_id,
     app_ids=[app_id, app_id_gpt4],
 )

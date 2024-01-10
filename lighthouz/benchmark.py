@@ -9,11 +9,17 @@ from marshmallow import ValidationError
 from lighthouz import Lighthouz
 from lighthouz.schema import benchmark_schema
 
+
 class Benchmark:
     def __init__(self, LH: Lighthouz):
         self.LH = LH
 
-    def generate_benchmark(self, benchmark_category: List[str], file_path: Optional[str] = None, folder_path: Optional[str] = None):
+    def generate_benchmark(
+        self,
+        benchmark_category: List[str],
+        file_path: Optional[str] = None,
+        folder_path: Optional[str] = None,
+    ):
         print("Generating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
             url = f"{self.LH.base_url}/benchmarks/generate"
@@ -42,13 +48,15 @@ class Benchmark:
             with open(file_path, "rb") as pdf_file:
                 pdf_data = pdf_file.read()
                 pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
-            
+
             benchmark_category.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate"
-            data = {"input": pdf_base64, 
-                "benchmarks": benchmark_category, 
-                "filename": os.path.basename(file_path)}
+            data = {
+                "input": pdf_base64,
+                "benchmarks": benchmark_category,
+                "filename": os.path.basename(file_path),
+            }
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
@@ -68,7 +76,10 @@ class Benchmark:
                 pdf_files = glob.glob(os.path.join(folder_path, "*.pdf"))
                 if len(pdf_files) == 0:
                     print("ERROR: No PDF files found in the folder.")
-                    return {"success": False, "message": "No PDF files found in the folder"}
+                    return {
+                        "success": False,
+                        "message": "No PDF files found in the folder",
+                    }
             else:
                 print("ERROR: Folder does not exist")
                 return {"success": False, "message": "Folder does not exist"}
@@ -86,13 +97,15 @@ class Benchmark:
                         }
                     )
             print("Generating benchmark with {} files".format(len(inputs)))
-            
+
             benchmark_category.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate"
-            data = {"input": inputs[0].input, 
-                "benchmarks": benchmark_category, 
-                "filename": inputs[0].filename}
+            data = {
+                "input": inputs[0].input,
+                "benchmarks": benchmark_category,
+                "filename": inputs[0].filename,
+            }
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
@@ -119,8 +132,13 @@ class Benchmark:
             print("Success! The benchmark has been created with id: ", benchmark_id)
             return {"success": True, "benchmark_id": benchmark_id}
 
-    
-    def extend_benchmark(self, benchmark_id: str, benchmark_category: List[str], file_path: Optional[str] = None, folder_path: Optional[str] = None):
+    def extend_benchmark(
+        self,
+        benchmark_id: str,
+        benchmark_category: List[str],
+        file_path: Optional[str] = None,
+        folder_path: Optional[str] = None,
+    ):
         print("Updating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
             url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
@@ -133,7 +151,10 @@ class Benchmark:
 
             if response.status_code == 200:
                 benchmark_id = response.json()["benchmark_id"]
-                print("Success! The benchmark has been updated. The id is still the same: ", benchmark_id)
+                print(
+                    "Success! The benchmark has been updated. The id is still the same: ",
+                    benchmark_id,
+                )
                 return {"success": True, "benchmark_id": benchmark_id}
             else:
                 print("ERROR: An error has occurred: ", response.json())
@@ -149,13 +170,15 @@ class Benchmark:
             with open(file_path, "rb") as pdf_file:
                 pdf_data = pdf_file.read()
                 pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
-            
+
             benchmark_category.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
-            data = {"input": pdf_base64, 
-                "benchmarks": benchmark_category, 
-                "filename": os.path.basename(file_path)}
+            data = {
+                "input": pdf_base64,
+                "benchmarks": benchmark_category,
+                "filename": os.path.basename(file_path),
+            }
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
@@ -164,7 +187,10 @@ class Benchmark:
 
             if response.status_code == 200:
                 benchmark_id = response.json()["benchmark_id"]
-                print("Success! The benchmark has been updated. The id is still the same: ", benchmark_id)
+                print(
+                    "Success! The benchmark has been updated. The id is still the same: ",
+                    benchmark_id,
+                )
                 return {"success": True, "benchmark_id": benchmark_id}
             else:
                 print("ERROR: An error has occurred: ", response.json())
@@ -175,7 +201,10 @@ class Benchmark:
                 pdf_files = glob.glob(os.path.join(folder_path, "*.pdf"))
                 if len(pdf_files) == 0:
                     print("ERROR: No PDF files found in the folder.")
-                    return {"success": False, "message": "No PDF files found in the folder"}
+                    return {
+                        "success": False,
+                        "message": "No PDF files found in the folder",
+                    }
             else:
                 print("ERROR: Folder does not exist")
                 return {"success": False, "message": "Folder does not exist"}
@@ -193,13 +222,15 @@ class Benchmark:
                         }
                     )
             print("Generating benchmark with {} files".format(len(inputs)))
-            
+
             benchmark_category.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
-            data = {"input": inputs[0].input, 
-                "benchmarks": benchmark_category, 
-                "filename": inputs[0].filename}
+            data = {
+                "input": inputs[0].input,
+                "benchmarks": benchmark_category,
+                "filename": inputs[0].filename,
+            }
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
@@ -223,7 +254,10 @@ class Benchmark:
                     return {"success": False, "message": response.json()}
                 print(f"Processed file #{i + 1}: {pdf_files[i]}")
 
-            print("Success! The benchmark has been updated. The id is still the same: ", benchmark_id)
+            print(
+                "Success! The benchmark has been updated. The id is still the same: ",
+                benchmark_id,
+            )
             return {"success": True, "benchmark_id": benchmark_id}
 
     def upload_benchmark(
@@ -265,10 +299,11 @@ class Benchmark:
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
             benchmark_id = response.json()["benchmark_id"]
-            print("Success! The benchmark has been uploaded and assigned an id: ", benchmark_id)
+            print(
+                "Success! The benchmark has been uploaded and assigned an id: ",
+                benchmark_id,
+            )
             return {"success": True, "benchmark_id": benchmark_id}
         else:
             print("ERROR: An error has occurred: ", response.json())
             return {"success": False, "message": response.json()}
-
-
