@@ -1,16 +1,6 @@
 ## Imports
 import os
 import requests
-from langchain import HuggingFacePipeline
-from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.llms import HuggingFaceEndpoint, HuggingFaceHub
-from langchain.prompts import PromptTemplate
-from langchain.text_splitter import TokenTextSplitter
-from langchain.vectorstores.chroma import Chroma
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 from lighthouz import Lighthouz
 from lighthouz.app import App
@@ -30,8 +20,22 @@ benchmark_generator = Benchmark(lh)
 benchmark_data = benchmark_generator.generate_benchmark(file_path=RAG_DOCUMENT, benchmark_category=benchmark_category) 
 benchmark_id = benchmark_data["benchmark_id"]
 
+# If you want to use pre-existing benchmarks, comment the above 3 lines and add your benchmark id below. 
+# benchmark_id = "659b276f431e6d9e85bb0523"
+
 ## STEP 2: Register your RAG app on Lighthouz  
 ### STEP 2a: Create your RAG system. This example is built using Langchain, OpenAI, and Chroma.
+from langchain import HuggingFacePipeline
+from langchain.chains import RetrievalQA
+from langchain.chat_models import ChatOpenAI
+from langchain.document_loaders import PyPDFLoader
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.llms import HuggingFaceEndpoint, HuggingFaceHub
+from langchain.prompts import PromptTemplate
+from langchain.text_splitter import TokenTextSplitter
+from langchain.vectorstores.chroma import Chroma
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+
 def langchain_rag_model(llm="gpt-3.5-turbo"):
     """
     This is a RAG model built with Langchain, OpenAI, and Chroma
@@ -121,18 +125,20 @@ def langchain_rag_query_function(query: str) -> str:
 rag_model = langchain_rag_model(llm="gpt-3.5-turbo")
 
 
-
 ### Step 2b: Register your app
 ### Note: Only register an application once to track all its evals one place. After first registration, use its app_id
 app = App(lh)
 app_data = app.register(name="gpt-3.5-turbo", model="gpt-3.5-turbo")
 app_id = app_data["app_id"]
 
+# If you want to use pre-registered app, comment the above 3 lines and add your app id below. 
+# app_id = "659d3a7f2d63d34f8fe49ca1"
+
 ## Step 3: Evaluate the RAG app on the benchmark with Lighthouz AutoEval
 evaluation = Evaluation(lh)
 e_single = evaluation.evaluate_rag_model(
     response_function=langchain_rag_query_function,
-    benchmark_id=benchmark_id, # You can also enter an existing benchmark id. Benchmark ids are on the dashboard: https://lighthouz.ai/benchmarks/
+    benchmark_id=benchmark_id, 
     app_id=app_id, 
 )
 
