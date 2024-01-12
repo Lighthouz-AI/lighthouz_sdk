@@ -12,7 +12,7 @@ os.environ[
     "OPENAI_API_KEY"
 ] = "sk-xx"  # Enter your OpenAI key to be used in the RAG model
 # RAG_DOCUMENT = "DATA_FOLDER/FILENAME_TO_GENERATE_RAG_BENCHMARK" # Enter the file name where RAG data is present, example EXAMPLE-DATA/apple-10Q-Q2-2022.pdf
-RAG_DOCUMENT = "./EXAMPLE-DATA/apple-10Q-Q2-2022.pdf"  # this example file is present at https://github.com/Lighthouz-AI/lighthouz_sdk/blob/88a6887398ed646909bf1ca085e40be94a5938bc/EXAMPLE-DATA/apple-10Q-Q2-2022.pdf
+RAG_DOCUMENT = "./EXAMPLE-DATA/apple-10K-2022.pdf"  # this example file is present at https://github.com/Lighthouz-AI/lighthouz_sdk/blob/88a6887398ed646909bf1ca085e40be94a5938bc/EXAMPLE-DATA/apple-10Q-Q2-2022.pdf
 
 lh = Lighthouz(
     "LIGHTHOUZ-API-KEY"
@@ -22,17 +22,22 @@ benchmark_category = [
 ]  # list of benchmarks to be created, options are ["rag_benchmark", "out_of_context", "pii_leak", "prompt_injection"]
 
 ## STEP 1: Generate a RAG benchmark with Lighthouz AutoBench
-benchmark_generator = Benchmark(lh)
-benchmark_data = benchmark_generator.generate_benchmark(
-    file_path=RAG_DOCUMENT, benchmark_category=benchmark_category
-)
-benchmark_id = benchmark_data["benchmark_id"]
+### You can two options: 1. use a benchmark you created earlier, or 2. create a new benchmar
 
-# If you want to use pre-existing benchmarks, comment the above 3 lines and add your benchmark id below.
-# benchmark_id = "659b276f431e6d9e85bb0523"
+### Option 1. You can provide benchmark ids of benchmarks you created previously. For example, we have pre-loaded a finance benchmark in your account. This benchmark has financial queries generated from apple's 10-K 2022 report. 
+### Benchmark id is available on the lighthouz dashboard.
+benchmark_id = "659b66198e4cc1f4af4e2373" # this is the pre-loaded finance benchmark on apple's 10-K report.
+
+### Option 2. You can generate a new benchmark by providing it a document or folder with documents. AutoBench will generate benchmarks based on the information in the document(s). 
+### Uncomment the following code to generate new benchmarks
+# benchmark_generator = Benchmark(lh)
+# benchmark_data = benchmark_generator.generate_benchmark(
+#     file_path=RAG_DOCUMENT, benchmark_category=benchmark_category
+# )
+# benchmark_id = benchmark_data["benchmark_id"]
 
 ## STEP 2: Register your RAG app on Lighthouz
-### STEP 2a: Create your RAG system. This example is built using Langchain, OpenAI, and Chroma.
+### STEP 2a: Create your RAG app. This is an example of a RAG app built using LangChain, OpenAI, and ChomaDB. You can replace it with your own RAG app code. 
 from langchain import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
@@ -124,7 +129,11 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
     print("Langchain RAG OpenAI agent has been initialized.")
     return rag_model
 
+rag_model = langchain_rag_model(llm="gpt-3.5-turbo")
 
+
+### The following function allows Lighthouz to send queries to your RAG app. 
+### If you replace the RAG app code above, you will need to update this function that takes the query prompt string as input and returns a textual response. 
 def langchain_rag_query_function(query: str) -> str:
     """
     This is a function to send queries to the RAG model
@@ -132,17 +141,18 @@ def langchain_rag_query_function(query: str) -> str:
     response = rag_model({"query": query})["result"]
     return response
 
-
-rag_model = langchain_rag_model(llm="gpt-3.5-turbo")
-
-
 ### Step 2b: Register your app
+
+#### You have two options: 1) register a new app, or 2) use an app you created earlier
+#### Option 1: You can register a new app.
+
 ### Note: Only register an application once to track all its evals one place. After first registration, use its app_id
 app = App(lh)
 app_data = app.register(name="gpt-3.5-turbo", model="gpt-3.5-turbo")
 app_id = app_data["app_id"]
 
-# If you want to use pre-registered app, comment the above 3 lines and add your app id below.
+#### Option 2: Use the id of an existing app.
+# If you want to use pre-registered app, comment the above 3 lines that register the app and add your app id below.
 # app_id = "659d3a7f2d63d34f8fe49ca1"
 
 ## Step 3: Evaluate the RAG app on the benchmark with Lighthouz AutoEval
@@ -154,8 +164,9 @@ e_single = evaluation.evaluate_rag_model(
 )
 
 ## Step 4: Compare multiple RAG apps on the benchmark with Lighthouz Arena
-rag_model_gpt4 = langchain_rag_model(llm="gpt-4")
 
+#### First, I create another RAG app, using the same RAG code defined above, but using a different LLM (GPT-4). 
+rag_model_gpt4 = langchain_rag_model(llm="gpt-4")
 
 def langchain_rag_query_function_gpt4(query: str) -> str:
     """
@@ -164,11 +175,11 @@ def langchain_rag_query_function_gpt4(query: str) -> str:
     response = rag_model_gpt4({"query": query})["result"]
     return response
 
-
 app = App(lh)
 app_data = app.register(name="gpt-4", model="gpt-4")
 app_id_gpt4 = app_data["app_id"]
 
+#### The following code compares two RAG apps on the same benchmark. 
 e_multiple = evaluation.evaluate_multiple_rag_models(
     response_functions=[
         langchain_rag_query_function,
