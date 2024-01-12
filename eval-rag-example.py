@@ -8,22 +8,30 @@ from lighthouz.benchmark import Benchmark
 from lighthouz.evaluation import Evaluation
 
 ## SET VARIABLES
-os.environ["OPENAI_API_KEY"] = "sk-xx" # Enter your OpenAI key to be used in the RAG model
+os.environ[
+    "OPENAI_API_KEY"
+] = "sk-xx"  # Enter your OpenAI key to be used in the RAG model
 # RAG_DOCUMENT = "DATA_FOLDER/FILENAME_TO_GENERATE_RAG_BENCHMARK" # Enter the file name where RAG data is present, example EXAMPLE-DATA/apple-10Q-Q2-2022.pdf
 RAG_DOCUMENT = "./EXAMPLE-DATA/apple-10Q-Q2-2022.pdf"  # this example file is present at https://github.com/Lighthouz-AI/lighthouz_sdk/blob/88a6887398ed646909bf1ca085e40be94a5938bc/EXAMPLE-DATA/apple-10Q-Q2-2022.pdf
 
-lh = Lighthouz("LIGHTHOUZ-API-KEY") # To obtain a Lighthouz API key contact srijan@lighthouz.ai
-benchmark_category = ["rag_benchmark"] # list of benchmarks to be created, options are ["rag_benchmark", "out_of_context", "pii_leak", "prompt_injection"] 
+lh = Lighthouz(
+    "LIGHTHOUZ-API-KEY"
+)  # To obtain a Lighthouz API key contact srijan@lighthouz.ai
+benchmark_category = [
+    "rag_benchmark"
+]  # list of benchmarks to be created, options are ["rag_benchmark", "out_of_context", "pii_leak", "prompt_injection"]
 
 ## STEP 1: Generate a RAG benchmark with Lighthouz AutoBench
 benchmark_generator = Benchmark(lh)
-benchmark_data = benchmark_generator.generate_benchmark(file_path=RAG_DOCUMENT, benchmark_category=benchmark_category) 
+benchmark_data = benchmark_generator.generate_benchmark(
+    file_path=RAG_DOCUMENT, benchmark_category=benchmark_category
+)
 benchmark_id = benchmark_data["benchmark_id"]
 
-# If you want to use pre-existing benchmarks, comment the above 3 lines and add your benchmark id below. 
+# If you want to use pre-existing benchmarks, comment the above 3 lines and add your benchmark id below.
 # benchmark_id = "659b276f431e6d9e85bb0523"
 
-## STEP 2: Register your RAG app on Lighthouz  
+## STEP 2: Register your RAG app on Lighthouz
 ### STEP 2a: Create your RAG system. This example is built using Langchain, OpenAI, and Chroma.
 from langchain import HuggingFacePipeline
 from langchain.chains import RetrievalQA
@@ -35,6 +43,7 @@ from langchain.prompts import PromptTemplate
 from langchain.text_splitter import TokenTextSplitter
 from langchain.vectorstores.chroma import Chroma
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+
 
 def langchain_rag_model(llm="gpt-3.5-turbo"):
     """
@@ -50,7 +59,7 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
     if not os.path.exists(persist_directory) or not os.listdir(persist_directory):
         embeddings = OpenAIEmbeddings()
         documents = []
-        if RAG_DOCUMENT.endswith(".pdf"): 
+        if RAG_DOCUMENT.endswith(".pdf"):
             loader = PyPDFLoader(RAG_DOCUMENT)
             documents.extend(loader.load())
         else:
@@ -74,22 +83,24 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
         # Load the existing vector store
         embeddings = OpenAIEmbeddings()
         vectDB = Chroma(
-            collection_name=collection_name, persist_directory=persist_directory, embedding_function=embeddings
+            collection_name=collection_name,
+            persist_directory=persist_directory,
+            embedding_function=embeddings,
         )
 
     # LLM used in RAG
-    if llm =="gpt-3.5-turbo":
+    if llm == "gpt-3.5-turbo":
         llm_model = ChatOpenAI(
-        model_name="gpt-3.5-turbo",
-        temperature=0,
-        request_timeout=120,
+            model_name="gpt-3.5-turbo",
+            temperature=0,
+            request_timeout=120,
         )
-    elif llm == "gpt-4": 
+    elif llm == "gpt-4":
         llm_model = ChatOpenAI(
             model_name="gpt-4",
             temperature=0,
             request_timeout=120,
-            )
+        )
 
     retriever = vectDB.as_retriever(return_source_document=True)
 
@@ -100,8 +111,7 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
     ## ANSWER: """.strip()
 
     prompt = PromptTemplate(
-        input_variables=["context", "question"],
-        template=prompt_template
+        input_variables=["context", "question"], template=prompt_template
     )
 
     rag_model = RetrievalQA.from_chain_type(
@@ -109,7 +119,7 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
         retriever=retriever,
         chain_type="stuff",
         return_source_documents=False,
-        chain_type_kwargs={"prompt":prompt}
+        chain_type_kwargs={"prompt": prompt},
     )
     print("Langchain RAG OpenAI agent has been initialized.")
     return rag_model
@@ -117,10 +127,11 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
 
 def langchain_rag_query_function(query: str) -> str:
     """
-    This is a function to send queries to the RAG model 
+    This is a function to send queries to the RAG model
     """
     response = rag_model({"query": query})["result"]
     return response
+
 
 rag_model = langchain_rag_model(llm="gpt-3.5-turbo")
 
@@ -131,19 +142,20 @@ app = App(lh)
 app_data = app.register(name="gpt-3.5-turbo", model="gpt-3.5-turbo")
 app_id = app_data["app_id"]
 
-# If you want to use pre-registered app, comment the above 3 lines and add your app id below. 
+# If you want to use pre-registered app, comment the above 3 lines and add your app id below.
 # app_id = "659d3a7f2d63d34f8fe49ca1"
 
 ## Step 3: Evaluate the RAG app on the benchmark with Lighthouz AutoEval
 evaluation = Evaluation(lh)
 e_single = evaluation.evaluate_rag_model(
     response_function=langchain_rag_query_function,
-    benchmark_id=benchmark_id, 
-    app_id=app_id, 
+    benchmark_id=benchmark_id,
+    app_id=app_id,
 )
 
 ## Step 4: Compare multiple RAG apps on the benchmark with Lighthouz Arena
 rag_model_gpt4 = langchain_rag_model(llm="gpt-4")
+
 
 def langchain_rag_query_function_gpt4(query: str) -> str:
     """
@@ -152,12 +164,16 @@ def langchain_rag_query_function_gpt4(query: str) -> str:
     response = rag_model_gpt4({"query": query})["result"]
     return response
 
+
 app = App(lh)
 app_data = app.register(name="gpt-4", model="gpt-4")
 app_id_gpt4 = app_data["app_id"]
 
 e_multiple = evaluation.evaluate_multiple_rag_models(
-    response_functions=[langchain_rag_query_function, langchain_rag_query_function_gpt4],
+    response_functions=[
+        langchain_rag_query_function,
+        langchain_rag_query_function_gpt4,
+    ],
     benchmark_id=benchmark_id,
     app_ids=[app_id, app_id_gpt4],
 )

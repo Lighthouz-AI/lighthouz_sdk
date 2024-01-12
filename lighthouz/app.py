@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 import requests
 
@@ -11,11 +11,11 @@ class App:
 
     def register(
         self,
-        model: str = "",
-        name: str = "",
-        description: Optional[str] = "",
-        app_type: Optional[str] = "",
-        endpoint: Optional[str] = "",
+        name: str,
+        model: str,
+        app_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
+        description: Optional[str] = None,
+        endpoint: Optional[str] = None,
     ):
         url = f"{self.LH.base_url}/apps/create"
         headers = {
@@ -33,5 +33,11 @@ class App:
             app_id = response.json()["app_id"]
             print("Success! The app has been registered and assigned an id: ", app_id)
             return {"success": True, "app_id": app_id}
+        elif response.status_code == 401:
+            raise Exception(
+                "Unauthorized. Check your API key. You can find your API key in the Lighthouz dashboard."
+            )
+        elif response.status_code == 400:
+            raise Exception(response.json().get("msg") or "Bad request.")
         else:
-            return {"success": False, "message": response.json()}
+            raise Exception("Something went wrong. Please try again later.")
