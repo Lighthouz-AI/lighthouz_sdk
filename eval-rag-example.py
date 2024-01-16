@@ -1,5 +1,6 @@
 ## Imports
 import os
+
 import requests
 
 from lighthouz import Lighthouz
@@ -24,11 +25,11 @@ benchmark_category = [
 ## STEP 1: Generate a RAG benchmark with Lighthouz AutoBench
 ### You can two options: 1. use a benchmark you created earlier, or 2. create a new benchmar
 
-### Option 1. You can provide benchmark ids of benchmarks you created previously. For example, we have pre-loaded a finance benchmark in your account. This benchmark has financial queries generated from apple's 10-K 2022 report. 
+### Option 1. You can provide benchmark ids of benchmarks you created previously. For example, we have pre-loaded a finance benchmark in your account. This benchmark has financial queries generated from apple's 10-K 2022 report.
 ### Benchmark id is available on the lighthouz dashboard.
-benchmark_id = "659b66198e4cc1f4af4e2373" # this is the pre-loaded finance benchmark on apple's 10-K report.
+benchmark_id = "659b66198e4cc1f4af4e2373"  # this is the pre-loaded finance benchmark on apple's 10-K report.
 
-### Option 2. You can generate a new benchmark by providing it a document or folder with documents. AutoBench will generate benchmarks based on the information in the document(s). 
+### Option 2. You can generate a new benchmark by providing it a document or folder with documents. AutoBench will generate benchmarks based on the information in the document(s).
 ### Uncomment the following code to generate new benchmarks
 # benchmark_generator = Benchmark(lh)
 # benchmark_data = benchmark_generator.generate_benchmark(
@@ -37,7 +38,7 @@ benchmark_id = "659b66198e4cc1f4af4e2373" # this is the pre-loaded finance bench
 # benchmark_id = benchmark_data["benchmark_id"]
 
 ## STEP 2: Register your RAG app on Lighthouz
-### STEP 2a: Create your RAG app. This is an example of a RAG app built using LangChain, OpenAI, and ChomaDB. You can replace it with your own RAG app code. 
+### STEP 2a: Create your RAG app. This is an example of a RAG app built using LangChain, OpenAI, and ChomaDB. You can replace it with your own RAG app code.
 from langchain import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
@@ -129,17 +130,19 @@ def langchain_rag_model(llm="gpt-3.5-turbo"):
     print("Langchain RAG OpenAI agent has been initialized.")
     return rag_model
 
+
 rag_model = langchain_rag_model(llm="gpt-3.5-turbo")
 
 
-### The following function allows Lighthouz to send queries to your RAG app. 
-### If you replace the RAG app code above, you will need to update this function that takes the query prompt string as input and returns a textual response. 
+### The following function allows Lighthouz to send queries to your RAG app.
+### If you replace the RAG app code above, you will need to update this function that takes the query prompt string as input and returns a textual response.
 def langchain_rag_query_function(query: str) -> str:
     """
     This is a function to send queries to the RAG model
     """
     response = rag_model({"query": query})["result"]
     return response
+
 
 ### Step 2b: Register your app
 
@@ -165,8 +168,9 @@ e_single = evaluation.evaluate_rag_model(
 
 ## Step 4: Compare multiple RAG apps on the benchmark with Lighthouz Arena
 
-#### First, I create another RAG app, using the same RAG code defined above, but using a different LLM (GPT-4). 
+#### First, I create another RAG app, using the same RAG code defined above, but using a different LLM (GPT-4).
 rag_model_gpt4 = langchain_rag_model(llm="gpt-4")
+
 
 def langchain_rag_query_function_gpt4(query: str) -> str:
     """
@@ -175,11 +179,12 @@ def langchain_rag_query_function_gpt4(query: str) -> str:
     response = rag_model_gpt4({"query": query})["result"]
     return response
 
+
 app = App(lh)
 app_data = app.register(name="gpt-4", model="gpt-4")
 app_id_gpt4 = app_data["app_id"]
 
-#### The following code compares two RAG apps on the same benchmark. 
+#### The following code compares two RAG apps on the same benchmark.
 e_multiple = evaluation.evaluate_multiple_rag_models(
     response_functions=[
         langchain_rag_query_function,

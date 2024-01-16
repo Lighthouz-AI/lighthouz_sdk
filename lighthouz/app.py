@@ -1,4 +1,4 @@
-from typing import Optional, Literal
+from typing import Literal, Optional
 
 import requests
 
@@ -33,6 +33,30 @@ class App:
             app_id = response.json()["app_id"]
             print("Success! The app has been registered and assigned an id: ", app_id)
             return {"success": True, "app_id": app_id}
+        elif response.status_code == 401:
+            raise Exception(
+                "Unauthorized. Check your API key. You can find your API key in the Lighthouz dashboard."
+            )
+        elif response.status_code == 400:
+            raise Exception(response.json().get("msg") or "Bad request.")
+        else:
+            raise Exception("Something went wrong. Please try again later.")
+
+    def register_new_version(
+        self,
+        app_id: str,
+        version_description: str,
+    ):
+        url = f"{self.LH.base_url}/apps/update/{app_id}/version"
+        headers = {
+            "api-key": self.LH.lh_api_key,
+        }
+        data = {"description": version_description}
+        response = requests.post(url, headers=headers, json=data)
+        if response.status_code == 200:
+            new_version = response.json().get("version")
+            print(f"Success! Version {new_version} has been created.")
+            return {"success": True, "msg": "New version created."}
         elif response.status_code == 401:
             raise Exception(
                 "Unauthorized. Check your API key. You can find your API key in the Lighthouz dashboard."
