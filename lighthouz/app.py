@@ -52,7 +52,7 @@ class App:
             "api-key": self.LH.lh_api_key,
         }
         data = {"description": version_description}
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.put(url, headers=headers, json=data)
         if response.status_code == 200:
             new_version = response.json().get("version")
             print(f"Success! Version {new_version} has been created.")
