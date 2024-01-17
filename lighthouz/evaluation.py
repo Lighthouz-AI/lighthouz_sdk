@@ -33,7 +33,7 @@ class Evaluation:
             else:
                 return {
                     "success": False,
-                    "message": benchmark_response.json()["message"],
+                    "message": benchmark_response.json().get("msg"),
                 }
 
             print(f"Evaluating on {len(benchmarks)} test case(s).")
@@ -87,10 +87,10 @@ class Evaluation:
             }
 
         else:
-            print("An error has occurred: ", test_create_response.json()["message"])
+            print("An error has occurred: ", test_create_response.json())
             return {
                 "success": False,
-                "message": test_create_response.json()["message"],
+                "message": test_create_response.json()["msg"],
             }
 
     def evaluate_multiple_rag_models(
