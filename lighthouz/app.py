@@ -35,7 +35,7 @@ class App:
             return {"success": True, "app_id": app_id}
         elif response.status_code == 401:
             raise Exception(
-                "Unauthorized. Check your API key. You can find your API key in the Lighthouz dashboard."
+                "Unauthorized. Check your API key, App Id, and Benchmark Id. You can find your API key in the Lighthouz dashboard."
             )
         elif response.status_code == 400:
             raise Exception(response.json().get("msg") or "Bad request.")
