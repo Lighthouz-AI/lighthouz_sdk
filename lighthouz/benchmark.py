@@ -102,9 +102,9 @@ class Benchmark:
 
             url = f"{self.LH.base_url}/benchmarks/generate"
             data = {
-                "input": inputs[0].input,
+                "input": inputs[0]["input"],
                 "benchmarks": benchmark_category,
-                "filename": inputs[0].filename,
+                "filename": inputs[0]["filename"],
             }
             headers = {
                 "api-key": self.LH.lh_api_key,
@@ -112,11 +112,13 @@ class Benchmark:
 
             response = requests.post(url, headers=headers, json=data)
 
-            if not response.get("success", False):
-                return response
+            if response.status_code != 200:
+                print("An error has occurred: ", response.json())
+                return {"success": False, "message": response.json()}
 
             print(f"Processed file #1: {pdf_files[0]}")
-            benchmark_id = response["benchmark_id"]
+
+            benchmark_id = response.json()["benchmark_id"]
             for i in range(1, len(inputs)):
                 url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
                 data = inputs[i]
@@ -227,9 +229,9 @@ class Benchmark:
 
             url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
             data = {
-                "input": inputs[0].input,
+                "input": inputs[0]["input"],
                 "benchmarks": benchmark_category,
-                "filename": inputs[0].filename,
+                "filename": inputs[0]["filename"],
             }
             headers = {
                 "api-key": self.LH.lh_api_key,
@@ -237,11 +239,12 @@ class Benchmark:
 
             response = requests.post(url, headers=headers, json=data)
 
-            if not response.get("success", False):
-                return response
+            if response.status_code != 200:
+                print("An error has occurred: ", response.json())
+                return {"success": False, "message": response.json()}
 
             print(f"Processed file #1: {pdf_files[0]}")
-            benchmark_id = response["benchmark_id"]
+            benchmark_id = response.json()["benchmark_id"]
             for i in range(1, len(inputs)):
                 url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
                 data = inputs[i]
