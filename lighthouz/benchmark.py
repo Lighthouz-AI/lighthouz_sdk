@@ -15,18 +15,18 @@ class Benchmark:
         self.LH = LH
 
     def generate_benchmark(
-        self,
-        benchmark_categories: List[
-            Literal[
-                "rag_benchmark",
-                "out_of_context",
-                "prompt_injection",
-                "pii_leak",
-                "prompt_variation",
-            ]
-        ],
-        file_path: Optional[str] = None,
-        folder_path: Optional[str] = None,
+            self,
+            benchmark_categories: List[
+                Literal[
+                    "rag_benchmark",
+                    "out_of_context",
+                    "prompt_injection",
+                    "pii_leak",
+                    "prompt_variation",
+                ]
+            ],
+            file_path: Optional[str] = None,
+            folder_path: Optional[str] = None,
     ):
         print("Generating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
@@ -129,12 +129,19 @@ class Benchmark:
             benchmark_id = response.json()["benchmark_id"]
             for i in range(1, len(inputs)):
                 url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
-                data = inputs[i]
+                data = {
+                    "input": inputs[i]["input"],
+                    "benchmarks": benchmark_categories,
+                    "filename": inputs[i]["filename"],
+                }
                 headers = {
                     "api-key": self.LH.lh_api_key,
                 }
                 response = requests.put(url, headers=headers, json=data)
-                if response.status_code != 200:
+                if response.status_code >= 500:
+                    print("ERROR: An error has occurred")
+                    return {"success": False, "msg": "An error has occurred"}
+                elif response.status_code != 200:
                     print("An error has occurred: ", response.json())
                     return {"success": False, "message": response.json()}
                 print(f"Processed file #{i + 1}: {pdf_files[i]}")
@@ -143,19 +150,19 @@ class Benchmark:
             return {"success": True, "benchmark_id": benchmark_id}
 
     def extend_benchmark(
-        self,
-        benchmark_id: str,
-        benchmark_categories: List[
-            Literal[
-                "rag_benchmark",
-                "out_of_context",
-                "prompt_injection",
-                "pii_leak",
-                "prompt_variation",
-            ]
-        ],
-        file_path: Optional[str] = None,
-        folder_path: Optional[str] = None,
+            self,
+            benchmark_id: str,
+            benchmark_categories: List[
+                Literal[
+                    "rag_benchmark",
+                    "out_of_context",
+                    "prompt_injection",
+                    "pii_leak",
+                    "prompt_variation",
+                ]
+            ],
+            file_path: Optional[str] = None,
+            folder_path: Optional[str] = None,
     ):
         print("Updating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
@@ -280,10 +287,10 @@ class Benchmark:
             return {"success": True, "benchmark_id": benchmark_id}
 
     def upload_benchmark(
-        self,
-        benchmark_name: str,
-        puts: List[dict[str, Any]],
-        benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
+            self,
+            benchmark_name: str,
+            puts: List[dict[str, Any]],
+            benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
     ) -> dict[str, Any]:
         """
         Uploads a benchmark to the server.
