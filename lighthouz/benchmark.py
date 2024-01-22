@@ -250,27 +250,31 @@ class Benchmark:
 
             benchmark_categories.append("rag_benchmark")
 
-            url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
-            data = {
-                "input": inputs[0]["input"],
-                "benchmarks": benchmark_categories,
-                "filename": inputs[0]["filename"],
-            }
-            headers = {
-                "api-key": self.LH.lh_api_key,
-            }
-
-            response = requests.post(url, headers=headers, json=data)
-
-            if response.status_code != 200:
-                print("An error has occurred: ", response.json())
-                return {"success": False, "message": response.json()}
-
-            print(f"Processed file #1: {pdf_files[0]}")
-            benchmark_id = response.json()["benchmark_id"]
-            for i in range(1, len(inputs)):
+            # url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
+            # data = {
+            #     "input": inputs[0]["input"],
+            #     "benchmarks": benchmark_categories,
+            #     "filename": inputs[0]["filename"],
+            # }
+            # headers = {
+            #     "api-key": self.LH.lh_api_key,
+            # }
+            #
+            # response = requests.post(url, headers=headers, json=data)
+            #
+            # if response.status_code != 200:
+            #     print("An error has occurred: ", response.json())
+            #     return {"success": False, "message": response.json()}
+            #
+            # print(f"Processed file #1: {pdf_files[0]}")
+            # benchmark_id = response.json()["benchmark_id"]
+            for i in range(len(inputs)):
                 url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
-                data = inputs[i]
+                data = {
+                    "input": inputs[i]["input"],
+                    "benchmarks": benchmark_categories,
+                    "filename": inputs[i]["filename"],
+                }
                 headers = {
                     "api-key": self.LH.lh_api_key,
                 }
