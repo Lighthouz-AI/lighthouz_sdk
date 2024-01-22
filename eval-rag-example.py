@@ -33,7 +33,7 @@ benchmark_id = "659b66198e4cc1f4af4e2373"  # this is the pre-loaded finance benc
 ### Uncomment the following code to generate new benchmarks
 # benchmark_generator = Benchmark(lh)
 # benchmark_data = benchmark_generator.generate_benchmark(
-#     file_path=RAG_DOCUMENT, benchmark_category=benchmark_category
+#     file_path=RAG_DOCUMENT, benchmark_categories=benchmark_categories
 # )
 # benchmark_id = benchmark_data["benchmark_id"]
 

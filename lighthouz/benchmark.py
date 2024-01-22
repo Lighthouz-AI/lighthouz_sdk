@@ -15,15 +15,16 @@ class Benchmark:
         self.LH = LH
 
     def generate_benchmark(
-        self,
-        benchmark_category: List[str],
-        file_path: Optional[str] = None,
-        folder_path: Optional[str] = None,
+            self,
+            benchmark_categories: List[
+                Literal["rag_benchmark", "out_of_context", "prompt_injection", "pii_leak", "prompt_variation"]],
+            file_path: Optional[str] = None,
+            folder_path: Optional[str] = None,
     ):
         print("Generating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
             url = f"{self.LH.base_url}/benchmarks/generate"
-            data = {"benchmarks": benchmark_category}
+            data = {"benchmarks": benchmark_categories}
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
@@ -49,12 +50,12 @@ class Benchmark:
                 pdf_data = pdf_file.read()
                 pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
 
-            benchmark_category.append("rag_benchmark")
+            benchmark_categories.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate"
             data = {
                 "input": pdf_base64,
-                "benchmarks": benchmark_category,
+                "benchmarks": benchmark_categories,
                 "filename": os.path.basename(file_path),
             }
             headers = {
@@ -98,12 +99,12 @@ class Benchmark:
                     )
             print("Generating benchmark with {} files".format(len(inputs)))
 
-            benchmark_category.append("rag_benchmark")
+            benchmark_categories.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate"
             data = {
                 "input": inputs[0]["input"],
-                "benchmarks": benchmark_category,
+                "benchmarks": benchmark_categories,
                 "filename": inputs[0]["filename"],
             }
             headers = {
@@ -135,16 +136,17 @@ class Benchmark:
             return {"success": True, "benchmark_id": benchmark_id}
 
     def extend_benchmark(
-        self,
-        benchmark_id: str,
-        benchmark_category: List[str],
-        file_path: Optional[str] = None,
-        folder_path: Optional[str] = None,
+            self,
+            benchmark_id: str,
+            benchmark_categories: List[
+                Literal["rag_benchmark", "out_of_context", "prompt_injection", "pii_leak", "prompt_variation"]],
+            file_path: Optional[str] = None,
+            folder_path: Optional[str] = None,
     ):
         print("Updating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
             url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
-            data = {"benchmarks": benchmark_category}
+            data = {"benchmarks": benchmark_categories}
             headers = {
                 "api-key": self.LH.lh_api_key,
             }
@@ -173,12 +175,12 @@ class Benchmark:
                 pdf_data = pdf_file.read()
                 pdf_base64 = base64.b64encode(pdf_data).decode("utf-8")
 
-            benchmark_category.append("rag_benchmark")
+            benchmark_categories.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
             data = {
                 "input": pdf_base64,
-                "benchmarks": benchmark_category,
+                "benchmarks": benchmark_categories,
                 "filename": os.path.basename(file_path),
             }
             headers = {
@@ -225,12 +227,12 @@ class Benchmark:
                     )
             print("Generating benchmark with {} files".format(len(inputs)))
 
-            benchmark_category.append("rag_benchmark")
+            benchmark_categories.append("rag_benchmark")
 
             url = f"{self.LH.base_url}/benchmarks/generate/{benchmark_id}"
             data = {
                 "input": inputs[0]["input"],
-                "benchmarks": benchmark_category,
+                "benchmarks": benchmark_categories,
                 "filename": inputs[0]["filename"],
             }
             headers = {
@@ -264,10 +266,10 @@ class Benchmark:
             return {"success": True, "benchmark_id": benchmark_id}
 
     def upload_benchmark(
-        self,
-        benchmark_name: str,
-        puts: List[dict[str, Any]],
-        benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
+            self,
+            benchmark_name: str,
+            puts: List[dict[str, Any]],
+            benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
     ) -> dict[str, Any]:
         """
         Uploads a benchmark to the server.
