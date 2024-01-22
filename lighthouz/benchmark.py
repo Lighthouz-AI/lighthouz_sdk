@@ -15,11 +15,18 @@ class Benchmark:
         self.LH = LH
 
     def generate_benchmark(
-            self,
-            benchmark_categories: List[
-                Literal["rag_benchmark", "out_of_context", "prompt_injection", "pii_leak", "prompt_variation"]],
-            file_path: Optional[str] = None,
-            folder_path: Optional[str] = None,
+        self,
+        benchmark_categories: List[
+            Literal[
+                "rag_benchmark",
+                "out_of_context",
+                "prompt_injection",
+                "pii_leak",
+                "prompt_variation",
+            ]
+        ],
+        file_path: Optional[str] = None,
+        folder_path: Optional[str] = None,
     ):
         print("Generating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
@@ -136,12 +143,19 @@ class Benchmark:
             return {"success": True, "benchmark_id": benchmark_id}
 
     def extend_benchmark(
-            self,
-            benchmark_id: str,
-            benchmark_categories: List[
-                Literal["rag_benchmark", "out_of_context", "prompt_injection", "pii_leak", "prompt_variation"]],
-            file_path: Optional[str] = None,
-            folder_path: Optional[str] = None,
+        self,
+        benchmark_id: str,
+        benchmark_categories: List[
+            Literal[
+                "rag_benchmark",
+                "out_of_context",
+                "prompt_injection",
+                "pii_leak",
+                "prompt_variation",
+            ]
+        ],
+        file_path: Optional[str] = None,
+        folder_path: Optional[str] = None,
     ):
         print("Updating benchmark. This might take a few minutes.")
         if not file_path and not folder_path:
@@ -266,10 +280,10 @@ class Benchmark:
             return {"success": True, "benchmark_id": benchmark_id}
 
     def upload_benchmark(
-            self,
-            benchmark_name: str,
-            puts: List[dict[str, Any]],
-            benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
+        self,
+        benchmark_name: str,
+        puts: List[dict[str, Any]],
+        benchmark_type: Literal["RAG chatbot", "non-Rag chatbot"] = "RAG chatbot",
     ) -> dict[str, Any]:
         """
         Uploads a benchmark to the server.
