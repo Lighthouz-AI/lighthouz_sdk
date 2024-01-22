@@ -6,7 +6,7 @@ with open("requirements.txt") as f:
 setup(
     # Basic info
     name="lighthouz",
-    version="0.2.0",
+    version="0.3.1",
     author="Lighthouz AI, Inc",
     author_email="srijan@lighthouz.ai",
     url="https://github.com/Lighthouz-AI/lighthouz_sdk",
