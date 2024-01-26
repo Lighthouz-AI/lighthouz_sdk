@@ -11,7 +11,7 @@ class Evaluation:
         self.LH = LH
 
     def evaluate_rag_model(
-        self, benchmark_id: str, app_id: str, response_function: Callable[[str], str]
+            self, benchmark_id: str, app_id: str, response_function: Callable[[str], str]
     ):
         test_create_url = f"{self.LH.base_url}/apps/{app_id}/tests/create"
         test_create_data = {"status": "completed", "benchmark_id": benchmark_id}
@@ -40,16 +40,22 @@ class Evaluation:
             results = []
             for idx, benchmark in enumerate(benchmarks):
                 try:
-                    benchmark["generated_response"] = response_function(
-                        benchmark["query"]
-                    )
+                    generated_response = response_function(benchmark["query"])
+                    if not isinstance(generated_response, str):
+                        print(
+                            {
+                                "success": False,
+                                "message": "The response function must return a string.",
+                            }
+                        )
+                    benchmark["generated_response"] = generated_response
                 except Exception as e:
                     print(
                         {
                             "success": False,
                             "message": str(e),
                             "type": "User response function error. Please check that you have provided a function "
-                            "that can take a query as an input.",
+                                    "that can take a query as an input.",
                         }
                     )
                     continue
@@ -94,10 +100,10 @@ class Evaluation:
             }
 
     def evaluate_multiple_rag_models(
-        self,
-        benchmark_id: str,
-        app_ids: list[str],
-        response_functions: list[Callable[[str], str]],
+            self,
+            benchmark_id: str,
+            app_ids: list[str],
+            response_functions: list[Callable[[str], str]],
     ):
         if len(app_ids) != len(response_functions):
             return {
