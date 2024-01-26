@@ -48,6 +48,7 @@ class Evaluation:
                                 "message": "The response function must return a string.",
                             }
                         )
+                        continue
                     benchmark["generated_response"] = generated_response
                 except Exception as e:
                     print(
