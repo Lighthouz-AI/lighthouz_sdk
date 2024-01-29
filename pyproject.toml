@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lighthouz"
+version = "0.0.3"
+dependencies = [
+    "requests",
+    "marshmallow",
+]
+authors = [
+    { name = "Lighthouz AI, Inc", email = "srijan@lighthouz.ai" },
+]
+maintainers = [
+    { name = "Srijan Kumar", email = "srijan@lighthouz.ai" },
+    { name = "Rohan Karan", email = "rohan@lighthouz.ai" },
+]
+description = "Lighthouz AI Python SDK"
+# long_description = "file: README.md"
+# long_description_content_type = "text/markdown"
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+keywords = ["lighthouz", "python", "sdk", "api", "development"]
+
+[project.urls]
+Homepage = "https://www.lighthouz.ai"
+Issues = "https://github.com/Lighthouz-AI/lighthouz_sdk/issues"
+Source = "https://github.com/Lighthouz-AI/lighthouz_sdk"
+

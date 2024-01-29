@@ -1,12 +1,12 @@
 from setuptools import find_packages, setup
 
-with open("requirements.txt") as f:
-    requirements = f.read().splitlines()
+# with open("requirements.txt") as f:
+#     requirements = f.read().splitlines()
 
 setup(
     # Basic info
     name="lighthouz",
-    version="0.3.1",
+    version="0.0.3",
     author="Lighthouz AI, Inc",
     author_email="srijan@lighthouz.ai",
     url="https://github.com/Lighthouz-AI/lighthouz_sdk",
@@ -17,8 +17,8 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     # Dependencies
-    # install_requires=["requests", "marshmallow"],
-    install_requires=requirements,
+    install_requires=["requests", "marshmallow"],
+    # install_requires=requirements,
     # Python version requirement
     python_requires=">=3.8",  # Your SDK's Python version requirement
     # Classifiers help users find your project
@@ -30,6 +30,8 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
     # Custom meta-data
     keywords="lighthouz python sdk api development",
