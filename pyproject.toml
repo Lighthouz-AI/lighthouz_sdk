@@ -4,14 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lighthouz"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = ["requests", "marshmallow"]
 authors = [
     { name = "Lighthouz AI, Inc", email = "srijan@lighthouz.ai" },
-]
-maintainers = [
-    { name = "Srijan Kumar", email = "srijan@lighthouz.ai" },
-    { name = "Rohan Karan", email = "rohan@lighthouz.ai" },
 ]
 description = "Lighthouz AI Python SDK"
 # long_description = "file: README.md"
@@ -27,12 +23,14 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 keywords = ["lighthouz", "python", "sdk", "api", "development", "evaluation"]
 
 [project.urls]
 Homepage = "https://www.lighthouz.ai"
 Documentation = "https://www.lighthouz.ai/docs"
-Issues = "https://github.com/Lighthouz-AI/lighthouz_sdk/issues"
 Source = "https://github.com/Lighthouz-AI/lighthouz_sdk"
+Issues = "https://github.com/Lighthouz-AI/lighthouz_sdk/issues"
 

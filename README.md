@@ -1,7 +1,7 @@
 ## Installation
-```pip install git+https://github.com/Lighthouz-AI/lighthouz_sdk```
+```pip install lighthouz```
 
 
-## Usage
+## Documentation
 
 Please refer to the [SDK docs](https://lighthouz.ai/docs/) for how to use.
