@@ -35,6 +35,7 @@ keywords = ["lighthouz", "python", "sdk", "api", "development"]
 
 [project.urls]
 Homepage = "https://www.lighthouz.ai"
+Documentation = "https://www.lighthouz.ai/docs"
 Issues = "https://github.com/Lighthouz-AI/lighthouz_sdk/issues"
 Source = "https://github.com/Lighthouz-AI/lighthouz_sdk"
 
