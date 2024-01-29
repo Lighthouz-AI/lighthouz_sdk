@@ -28,7 +28,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
-keywords = ["lighthouz", "python", "sdk", "api", "development"]
+keywords = ["lighthouz", "python", "sdk", "api", "development", "evaluation"]
 
 [project.urls]
 Homepage = "https://www.lighthouz.ai"
