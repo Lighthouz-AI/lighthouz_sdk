@@ -1,6 +1,6 @@
 ![lighthouz](https://lighthouz.ai/lighthouz-logo.png)
 
----
+<hr>
 <div align="center">
 
 ![PyPI - Version](https://img.shields.io/pypi/v/lighthouz?label=lighthouz&link=https%3A%2F%2Fpypi.org%2Fproject%2Flighthouz)
