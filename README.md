@@ -6,6 +6,8 @@
 [![Docs](https://img.shields.io/badge/docs-lighthouz%20docs-green)](https://www.lighthouz.ai/docs/)
 [![GitHub](https://img.shields.io/badge/github-Lighthouz_AI-blue)](https://github.com/Lighthouz-AI)
 
+[Installation](#installation) | [Quick Usage](#quick-usage) | [Documentation](https://www.lighthouz.ai/docs/)
+
 </div>
 
 Lighthouz AI is a premier AI benchmarking, evaluation, and security platform. It is meticulously designed to aid
@@ -81,7 +83,3 @@ e_single = evaluation.evaluate_rag_model(
 )
 print(e_single)
 ```
-
-## Documentation
-
-Please refer to the [SDK docs](https://lighthouz.ai/docs/) for how to use.
