@@ -4,7 +4,7 @@
 <div align="center">
 
 ![PyPI - Version](https://img.shields.io/pypi/v/lighthouz?label=lighthouz&link=https%3A%2F%2Fpypi.org%2Fproject%2Flighthouz)
-[![Docs](https://img.shields.io/badge/docs-lighthouz%20docs-blue)](https://www.lighthouz.ai/docs/)
+[![Docs](https://img.shields.io/badge/docs-lighthouz%20docs-green)](https://www.lighthouz.ai/docs/)
 [![GitHub](https://img.shields.io/badge/github-Lighthouz_AI-blue)](https://github.com/Lighthouz-AI)
 
 </div>
@@ -15,7 +15,15 @@ applications.
 
 ## Installation
 
-```pip install lighthouz```
+```bash
+pip install lighthouz
+```
+
+if you want to install from source
+
+```bash
+pip install git+https://github.com/Lighthouz-AI/lighthouz_sdk
+```
 
 ## Documentation
 
