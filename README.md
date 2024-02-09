@@ -28,11 +28,10 @@ pip install git+https://github.com/Lighthouz-AI/lighthouz_sdk
 
 ### Initialization
 
-
 ```python
 from lighthouz import Lighthouz
 
-LH = Lighthouz("lighthouz_api_key") # replace with your lighthouz api key
+LH = Lighthouz("lighthouz_api_key")  # replace with your lighthouz api key
 ```
 
 ### AutoBench
@@ -65,9 +64,7 @@ The possible `benchmark_categories` options are:
   manipulated.
 * "pii_leak": this benchmark contains prompts testing whether the LLM can leak PII data.
 
-### Evaluation
-
-## Evaluate a RAG Application
+### Evaluate a RAG Application
 
 Shows how to use the Evaluation class from Lighthouz to evaluate a RAG system. It involves initializing an
 evaluation instance with a Lighthouz API key and using the evaluate_rag_model method with a response function, benchmark
