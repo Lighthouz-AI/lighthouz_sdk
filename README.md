@@ -1,4 +1,6 @@
-# ![lighthouz](https://lighthouz.ai/lighthouz-logo.png)
+<div align="center">
+  <img src="https://lighthouz.ai/lighthouz-logo.png" alt="lighthouz" width="75%"/>
+</div>
 
 <div align="center">
 
