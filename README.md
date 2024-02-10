@@ -106,7 +106,7 @@ print(e_single)
 ```
 
 
-### Use Lighthouz Eval Endpoint to Evaluate a Single Query
+### Use Lighthouz Eval Endpoint to Evaluate a Single RAG Query
 
 Add your Lighthouz API key before running the following code: 
 
