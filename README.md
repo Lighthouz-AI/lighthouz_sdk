@@ -8,7 +8,7 @@
 [![Docs](https://img.shields.io/badge/docs-lighthouz%20docs-green)](https://www.lighthouz.ai/docs/)
 [![GitHub](https://img.shields.io/badge/github-Lighthouz_AI-blue)](https://github.com/Lighthouz-AI)
 
-[Installation](#installation) | [Quick Usage](#quick-usage) | [Documentation](https://www.lighthouz.ai/docs/)
+[Website](https://lighthouz.ai/) | [Installation](#installation) | [Quick Usage](#quick-usage) | [Documentation](https://www.lighthouz.ai/docs/)
 
 </div>
 
