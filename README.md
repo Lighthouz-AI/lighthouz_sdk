@@ -131,3 +131,7 @@ curl -X POST "https://lighthouz.ai/api/api/evaluate_query" \
 
 [Evaluation of a RAG app hosted on an API endpoint](https://lighthouz.ai/docs/examples/api-example)
 
+## Contact
+
+For any queries, reach out to contact@lighthouz.ai
+
