@@ -123,3 +123,11 @@ curl -X POST "https://lighthouz.ai/api/api/evaluate_query" \
 }'
 ```
 
+## Quick Start Examples 
+
+[Evaluation of a RAG app built with LangChain](https://lighthouz.ai/docs/examples/langchain-example)
+
+[Evaluation of a RAG app built with LlamaIndex](https://lighthouz.ai/docs/examples/llamaindex-example)
+
+[Evaluation of a RAG app hosted on an API endpoint](https://lighthouz.ai/docs/examples/api-example)
+
