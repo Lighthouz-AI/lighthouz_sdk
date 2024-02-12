@@ -82,7 +82,7 @@ The possible `benchmark_categories` options are:
 * "pii_leak": this benchmark contains prompts testing whether the LLM can leak PII data.
 
 The resulting data, when viewed on Lighthouz platform, looks as follows:
-![AutoBench](img/autobench-image.png)
+![AutoBench](https://lighthouz.ai/assets/images/autobench-ca4f6afca2405f37ce0de8f1e0c68f8e.png)
 
 ### Evaluate a RAG Application on a Benchmark Dataset
 
@@ -103,10 +103,10 @@ print(e_single)
 ```
 
 The evaluation results, when viewed on Lighthouz platform, look as follows:
-![AutoBench](img/eval-one.png)
+![AutoBench](https://lighthouz.ai/assets/images/eval-one-a075376733a726a70d0941e034f30a07.png)
 
 Individual test cases are shown as:
-![AutoBench](img/eval-one-detail.png)
+![AutoBench](https://lighthouz.ai/assets/images/eval-one-detail-677b266dfb731953f826ef91aefe83b9.png)
 
 ### Use Lighthouz Eval Endpoint to Evaluate a Single RAG Query
 
