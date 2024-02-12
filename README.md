@@ -21,7 +21,7 @@ applications.
 
 Lighthouz has the following features: 
 
-### 1. AutoBench: Create custom benchmarks 
+### 1. AutoBench: Create AI-assisted custom benchmarks 
 - **Create Benchmarks**: AutoBench creates application-specific and task-specific benchmark test cases to assess critical reliability, security, and privacy aspects of your LLM app. 
 - **Flexibility**: Tailor-made benchmarks to suit your specific evaluation needs.
 - **Integration with your own benchmarks**: Seamlessly upload and incorporate your pre-existing benchmarks.
@@ -31,12 +31,6 @@ Lighthouz has the following features:
 - **Insightful Feedback**: Gain valuable insights to refine your application.
 - **Comparative Analysis**: Effortlessly compare different LLM apps and versions.
 - **Customization**: Test the impact on performance of prompts, LLMs, hyperparameters, etc.
-
-### 3. Watchtower: Monitoring and Security
-- **Real-Time Monitoring**: Keep a vigilant eye on your LLM applications.
-- **Metrics**: View detailed metrics spanning hallucinations, quality, prompt injection, PII leaks, and more.
-- **Enhanced Security**: Proactive measures to safeguard your LLM app against vulnerabilities like hallucination, data leak, prompt injection, and more.
-- **Easy API integration**: easily call Lighthouz API to log and evaluate all calls.
 
 
 ## Installation
