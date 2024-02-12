@@ -21,12 +21,12 @@ applications.
 
 Lighthouz has the following features: 
 
-### 1. AutoBench: Create AI-assisted custom benchmarks 
+### 1. AutoBench: Create AI-assisted custom benchmarks for security, privacy, and reliability 
 - **Create Benchmarks**: AutoBench creates application-specific and task-specific benchmark test cases to assess critical security, privacy, and reliability aspects of your LLM app. 
 - **Flexibility**: Tailor-made benchmarks to suit your specific evaluation needs.
 - **Integration with your own benchmarks**: Seamlessly upload and incorporate your pre-existing benchmarks.
 
-### 2. Eval Studio: Evaluate LLM Applications
+### 2. Eval Studio: Evaluate LLM Applications for security, privacy, and reliability
 - **Comprehensive Analysis**: Thoroughly assess your LLM application for hallucinations, toxicity, out-of-context responses, PII data leaks, and prompt injections.
 - **Insightful Feedback**: Gain valuable insights to refine your application.
 - **Comparative Analysis**: Effortlessly compare different LLM apps and versions.
