@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lighthouz"
-version = "0.0.4"
+version = "0.0.4a"
 dependencies = ["requests", "marshmallow"]
 authors = [
     { name = "Lighthouz AI, Inc", email = "srijan@lighthouz.ai" },
