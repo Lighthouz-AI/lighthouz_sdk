@@ -16,29 +16,30 @@ Lighthouz AI is a AI benchmark data generation, evaluation, and security platfor
 developers in both evaluating the reliability and enhancing the capabilities of their Language Learning Model (LLM)
 applications.
 
-
 ## Key Features
 
-Lighthouz has the following features: 
+Lighthouz has the following features:
 
-### 1. AutoBench: Create AI-assisted custom benchmarks for security, privacy, and reliability 
-- **Create Benchmarks**: AutoBench creates application-specific and task-specific benchmark test cases to assess critical security, privacy, and reliability aspects of your LLM app. 
+### 1. AutoBench: Create AI-assisted custom benchmarks for security, privacy, and reliability
+
+- **Create Benchmarks**: AutoBench creates application-specific and task-specific benchmark test cases to assess
+  critical security, privacy, and reliability aspects of your LLM app.
 - **Flexibility**: Tailor-made benchmarks to suit your specific evaluation needs.
 - **Integration with your own benchmarks**: Seamlessly upload and incorporate your pre-existing benchmarks.
 
 ### 2. Eval Studio: Evaluate LLM Applications for security, privacy, and reliability
-- **Comprehensive Analysis**: Thoroughly assess your LLM application for hallucinations, toxicity, out-of-context responses, PII data leaks, and prompt injections.
+
+- **Comprehensive Analysis**: Thoroughly assess your LLM application for hallucinations, toxicity, out-of-context
+  responses, PII data leaks, and prompt injections.
 - **Insightful Feedback**: Gain valuable insights to refine your application.
 - **Comparative Analysis**: Effortlessly compare different LLM apps and versions.
 - **Customization**: Test the impact on performance of prompts, LLMs, hyperparameters, etc.
-
 
 ## Installation
 
 ```bash
 pip install lighthouz
 ```
-
 
 ## Quick Usage
 
@@ -80,10 +81,10 @@ The possible `benchmark_categories` options are:
   manipulated.
 * "pii_leak": this benchmark contains prompts testing whether the LLM can leak PII data.
 
-The resulting data, when viewed on Lighthouz platform, looks as follows: 
+The resulting data, when viewed on Lighthouz platform, looks as follows:
 ![AutoBench](img/autobench-image.png)
 
-### Evaluate a RAG Application on a Benchmark Dataset 
+### Evaluate a RAG Application on a Benchmark Dataset
 
 The following shows how to use the Evaluation class from Lighthouz to evaluate a RAG system. It involves initializing an
 evaluation instance with a Lighthouz API key and using the evaluate_rag_model method with a response function, benchmark
@@ -101,17 +102,16 @@ e_single = evaluation.evaluate_rag_model(
 print(e_single)
 ```
 
-The evaluation results, when viewed on Lighthouz platform, look as follows: 
+The evaluation results, when viewed on Lighthouz platform, look as follows:
 ![AutoBench](img/eval-one.png)
 Individual test cases are shown as:
 ![AutoBench](img/eval-one-detail.png)
 
-
 ### Use Lighthouz Eval Endpoint to Evaluate a Single RAG Query
 
-Add your Lighthouz API key before running the following code: 
+Add your Lighthouz API key before running the following code:
 
-```
+```bash
 curl -X POST "https://lighthouz.ai/api/api/evaluate_query" \
 -H "api-key: YOUR LH API KEY" \
 -H "Content-Type: application/json" \
@@ -124,9 +124,9 @@ curl -X POST "https://lighthouz.ai/api/api/evaluate_query" \
 }'
 ```
 
-The returned result, in json format, is as follows: 
+The returned result, in json format, is as follows:
 
-```
+```json
 {
   "_id":"65c99a2a3ddb41f89115d327",
   "app_id":"65b6c0af56ecfafc9440b970",
@@ -149,10 +149,9 @@ The returned result, in json format, is as follows:
   "query_pii":[],
   "generated_response_pii":[],
 }
-
 ```
 
-## Quick Start Examples 
+## Quick Start Examples
 
 [Evaluation of a RAG app built with LangChain](https://lighthouz.ai/docs/examples/langchain-example)
 
