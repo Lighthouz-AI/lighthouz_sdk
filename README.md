@@ -104,6 +104,7 @@ print(e_single)
 
 The evaluation results, when viewed on Lighthouz platform, look as follows:
 ![AutoBench](img/eval-one.png)
+
 Individual test cases are shown as:
 ![AutoBench](img/eval-one-detail.png)
 
